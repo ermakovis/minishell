@@ -19,7 +19,9 @@ SRC_DIR=./src
 LIB_DIR=./libft
 OBJ_DIR=./obj
 
-SRC_NAME=main.c
+SRC_NAME=main.c\
+	cleanup.c\
+	process_env.c
 
 OBJ_NAME=$(SRC_NAME:.c=.o)
 
