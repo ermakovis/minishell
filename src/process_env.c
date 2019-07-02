@@ -1,43 +1,32 @@
 #include "minishell.h"
 
-static char **process_path(char **env)
+char	**copy_env(char **env)
 {
-    int	    i;
-    char    **path;
+	int		i;
+	char	**new_env;
 
-    i = -1;
-    path = NULL;
-    while (env[++i])
-    {
-	if (ft_strnequ("PATH=", env[i], 5))
-	    if (!(path = ft_strsplit(env[i] + 5, ':')))
+	i = -1;
+	while(env[++i]);
+	if (!(new_env = (char**)malloc(sizeof(char*) * (i + 1))))
 		return (NULL);
-    }
-    return (path);
+	i = -1;
+	while (env[++i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+	}
+	new_env[i] = NULL;
+	return (new_env);
 }
 
-static char *process_cwd(void)
+int	    process_env(char **env, t_msh **msh)
 {
-    char    cwd[PATH_MAX];
-    char    *output;
-
-    ft_bzero(cwd, PATH_MAX);
-    output = NULL;
-    getcwd(cwd, PATH_MAX);
-    if (!(output = ft_strdup(cwd)))
-	return (NULL);
-    return (output);
-}
-
-
-
-int	    process_env(char **env, t_msh *msh)
-{
+	t_msh	*new_msh;
     int	    i = -1;
 
-    ft_bzero(msh, sizeof(t_msh));
-    ft_memdel((void**)&(msh->env_path));
-    msh->env_path = process_path(env); 
-    msh->env_cwd = process_cwd();
+	if (!(new_msh = malloc(sizeof(t_msh))))
+		return (0);
+    ft_bzero(new_msh, sizeof(t_msh));
+    new_msh->env = copy_env(env);
+	*msh = new_msh;
     return (1);
 }

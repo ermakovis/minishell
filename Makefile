@@ -20,8 +20,10 @@ LIB_DIR=./libft
 OBJ_DIR=./obj
 
 SRC_NAME=main.c\
+	process_env.c\
+	utils.c\
 	cleanup.c\
-	process_env.c
+	msh_env.c\
 
 OBJ_NAME=$(SRC_NAME:.c=.o)
 

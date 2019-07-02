@@ -12,12 +12,15 @@
 
 typedef	struct	s_msh
 {
-    char    *env_cwd;
-    char    **env_path;
+	char	*command;
+	char	**env;
     char    **tokens;
-}		t_msh;
+}				t_msh;
 
-void		cleanup(t_msh **msh, int exit_code, char *message);
-int		process_env(char **env, t_msh *msh);
-
+int		process_env(char **env, t_msh **msh);
+int		ft_getchar(void);
+char	*parse_env(char *var, char **env);
+void	cleanup(t_msh **msh, int exit_code, char *message);
+void	*ft_notrealloc(void *old_ptr, int old_size, int new_size);
+void	msh_env(t_msh *msh);
 #endif
