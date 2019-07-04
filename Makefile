@@ -20,10 +20,15 @@ LIB_DIR=./libft
 OBJ_DIR=./obj
 
 SRC_NAME=main.c\
+	launch_programm.c\
 	process_env.c\
+	process_builtins.c\
 	utils.c\
 	cleanup.c\
 	msh_env.c\
+	msh_setenv.c\
+	msh_unsetenv.c\
+	msh_small_funcs.c\
 
 OBJ_NAME=$(SRC_NAME:.c=.o)
 

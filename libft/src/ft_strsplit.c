@@ -14,47 +14,47 @@
 
 static int	nbwords(char const *s, char c)
 {
-	int		i;
-	int		nb;
+    int		i;
+    int		nb;
 
-	i = 0;
-	nb = 0;
-	while (s[i])
-	{
-		while (s[i] == c)
-			++i;
-		if (s[i])
-			++nb;
-		while (s[i] && s[i] != c)
-			++i;
-	}
-	return (nb);
+    i = 0;
+    nb = 0;
+    while (s[i])
+    {
+	while (s[i] == c)
+	    ++i;
+	if (s[i])
+	    ++nb;
+	while (s[i] && s[i] != c)
+	    ++i;
+    }
+    return (nb);
 }
 
 char		**ft_strsplit(char const *s, char c)
 {
-	char	**tab;
-	int		i;
-	int		j;
-	int		k;
+    char	**tab;
+    int		i;
+    int		j;
+    int		k;
 
-	if (!(tab = (char **)malloc(sizeof(char *) * (nbwords(s, c) + 1))))
-		return (NULL);
-	j = 0;
-	k = 0;
-	while (s[k])
+    if (!(tab = (char **)malloc(sizeof(char *) * (nbwords(s, c) + 1))))
+	return (NULL);
+    ft_bzero(tab, sizeof(char *) * (nbwords(s, c) + 1));
+    j = 0;
+    k = 0;
+    while (s[k])
+    {
+	while (s[k] == c)
+	    ++k;
+	i = k;
+	while (s[k] && s[k] != c)
+	    ++k;
+	if (k > i)
 	{
-		while (s[k] == c)
-			++k;
-		i = k;
-		while (s[k] && s[k] != c)
-			++k;
-		if (k > i)
-		{
-			tab[j] = ft_strndup(s + i, k - i);
-			++j;
-		}
+	    tab[j] = ft_strndup(s + i, k - i);
+	    ++j;
 	}
-	tab[j] = NULL;
-	return (tab);
+    }
+    return (tab);
 }

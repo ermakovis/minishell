@@ -1,118 +1,65 @@
 #include "minishell.h"
 
-int	ft_getchar(void)
+void	get_command(t_msh *msh)
 {
-    int ch;
+    int	    i;
+    int	    buff_size;
+    int	    ch;
+    char    *cmd;
 
-	ch = 0;
-    read(0, &ch, 1);
-    return (ch);
-}
-
-char	*get_command(void)
-{
-	int	    i;
-	int	    buff_size;
-	int	    ch;
-	char    *cmd;
-
-	i = 0;
-	buff_size = MSH_BUFF_SIZE;
-	if (!(cmd = (char*)malloc(MSH_BUFF_SIZE)))
-		return (NULL);
-	ft_bzero(cmd, MSH_BUFF_SIZE);
-	while (1)
+    i = 0;
+    buff_size = MSH_BUFF_SIZE;
+    if (!(cmd = (char*)malloc(MSH_BUFF_SIZE)))
+	cleanup(&msh, -1, "Failed to malloc for command");
+    ft_bzero(cmd, MSH_BUFF_SIZE);
+    while (1)
+    {
+	ch = ft_getchar();
+	if (ch == EOF || ch == '\n')
 	{
-		ch = ft_getchar();
-		if (ch == EOF || ch == '\n')
-		{
-			cmd[i] = '\0';
-			return (cmd);
-		}
-		cmd[i++] = ch;
-		if (i == buff_size)
-		{
-			buff_size += MSH_BUFF_SIZE;
-			if (!(ft_notrealloc(cmd, i, buff_size))) 
-			{
-				ft_memdel((void**)&cmd);
-				return (NULL);
-			}
-		}
+	    cmd[i] = '\0';
+	    msh->command = cmd;
+	    return ;
 	}
-}
-
-void	launch_program(t_msh *msh)
-{
-	pid_t   pid;
-	int	    status;
-	int	    i;
-
-	if ((pid = fork()) < 0)
+	cmd[i++] = ch;
+	if (i == buff_size)
 	{
-		ft_printf("%s: fork failed\n", msh->tokens[0]);
-		return ;
+	    buff_size += MSH_BUFF_SIZE;
+	    if (!(ft_notrealloc(cmd, i, buff_size))) 
+	    {
+		ft_memdel((void**)&cmd);
+		cleanup(&msh, -1, "Failed to realloc for command");
+	    }
 	}
-	if (pid == 0 && execve(msh->tokens[0], msh->tokens, msh->env) < 0)
-	{
-		ft_printf("%s: command not found\n", msh->tokens[0]);
-		return ;
-	}
-	if (pid > 0)
-	{
-		waitpid(pid, &status, WUNTRACED);
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			waitpid(pid, &status, WUNTRACED);
-	}
+    }
 }
 
 void	handle_sigint(int signo)
 {
-	if (signo == SIGINT)
-	{
-
-		ft_printf("\n");
-		exit(1) ;
-	}
-}
-
-void	display_prompt(t_msh *msh)
-{
-	char	*home;
-	char	*pwd;
-	int		home_len;
-
-	home = parse_env("HOME=", msh->env);
-	pwd = parse_env("PWD=", msh->env);
-	home_len = ft_strlen(home);
-	if (ft_strnequ(pwd, home, home_len))
-	{
-		ft_printf("~%s $: ", pwd + home_len);	
-	}
-	else
-		ft_printf("%s $: ", pwd);
+    if (signo == SIGINT)
+    {
+	ft_printf("\n");
+	return ;
+    }
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_msh   *msh;
-	char    *command;
+    t_msh   *msh;
 
-	msh	= NULL;
-	command = NULL;
-	while (1)
-	{
-		if (!(process_env(env, &msh)))
-			cleanup(NULL, -1, "Failed to process env\n");
-		signal(SIGINT, handle_sigint);
-		display_prompt(msh);
-		if (!(command = get_command()))
-			cleanup(&msh, -1, "Failed to get line\n");
-		if (command && !(msh->tokens = ft_strsplit(command, ' ')))
-			cleanup(&msh, -1, "Failed to obtain tokkens\n"); 
-		ft_memdel((void**)&command);
-		launch_program(msh);
-		cleanup(&msh, 1, NULL);
-	}
+    msh = NULL;
+    signal(SIGINT, handle_sigint);
+    process_env(env, &msh);
+    process_builtins(msh);
+    while (1)
+    {
+	display_prompt(msh);
+	get_command(msh);
+	msh->tokens = ft_strsplit(msh->command, ' ');
+	launch_program(msh);
+	ft_memdel((void**)&msh->command);
+	clean_table(&(msh->tokens));
+    }
+    return (1);
 }
 
