@@ -79,6 +79,8 @@ void	cleanup(t_msh **msh, int exit_code, char *message)
 		clean_tokens(&((*msh)->tok));
 	if ((*msh)->env)
 		clean_table(&((*msh)->env));
+	if ((*msh)->tokens)
+		clean_table(&((*msh)->tokens));
 	if ((*msh)->bin)
 		clean_builtins(&((*msh)->bin));
 	ft_memdel((void**)msh);

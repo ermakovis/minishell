@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 20:51:28 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/06 21:22:04 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/06 21:55:21 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ int		process_tokens(t_msh *msh)
 	char	*str;
 
 	i = -1;
+	str = NULL;
 	buff_size = MSH_BUFF_SIZE;
-	if (!(str = ft_strnew(MSH_BUFF_SIZE)))
-		cleanup(&msh, -1, "Failed to malloc for token");
 	while((ch = ft_getchar()) >= 0) 
 	{
+		if (!str)
+			str = ft_strnew(MSH_BUFF_SIZE);
 		if (ch == '\\' && (ch = ft_getchar()))
 			ch != '\n' ? str[++i] = ch : 1;
 		else if (ch == 0 || ch == '\n')

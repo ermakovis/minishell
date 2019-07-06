@@ -38,26 +38,19 @@ static int process_tokens_list(t_msh *msh)
 {
 	int		i;
 	char	**tokens;
-	t_tok	*tok_cur;
-	t_tok	*tok_next;
 
-	i = tokens_size(msh);
-	if (!(tokens = (char**)malloc(sizeof(char*) * (i + 2))))
+	if(!(i = tokens_size(msh)))
+		return (0);
+	if (!(tokens = (char**)malloc(sizeof(char*) * (i + 1))))
 		cleanup(&msh, -1, "process_tokens_list");
 	bzero(tokens, sizeof(char*) * (i + 1));
 	i = -1;
-	tok_cur = msh->tok;
-	tok_next = NULL;
-	while (tok_cur)
+	while (msh->tok)
 	{
-		tok_next = tok_cur->next;
-		tokens[++i] = ft_strdup(tok_cur->token);
-		ft_memdel((void**)&(tok_cur->token));
-		ft_memdel((void**)&(tok_cur));
-		tok_cur = tok_next;	
+		tokens[++i] = ft_strdup(msh->tok->token);
+		pop_token(msh);
 	}
 	msh->tokens = tokens;
-	msh->tok = tok_cur;
 	return (0);
 }
 
@@ -79,22 +72,17 @@ void	launch_program(t_msh *msh)
 
 	check_var(msh);
 	process_tokens_list(msh);
-	process_expansions(msh);
 	print_table(msh->tokens);
-	if (!(msh->tokens) || !(msh->tokens[0]) || check_buildins(msh))
-		return ;
-	if ((pid = fork()) < 0)
-	{
+	if (!(msh->tokens) || !(msh->tokens[0]) || check_buildins(msh));
+	else if ((pid = fork()) < 0)
 		ft_printf("%s: fork failed\n", msh->tokens[0]);
-		return ;
-	}
-	if (pid == 0)
+	else if (pid == 0)
 	{
 		if (execve(msh->tokens[0], msh->tokens, msh->env) < 0)
 			ft_printf("%s: command not found\n", msh->tokens[0]);
 		exit(-1);
 	}
-	if (pid > 0)
+	else if (pid > 0)
 	{
 		waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))

@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 20:51:14 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/06 21:05:31 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/06 21:52:14 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int		add_token(char **str, int *i, t_msh *msh)
 	ft_bzero(new, sizeof(t_tok));
 	new->token = ft_strdup(*str);
 	ft_memdel((void**)str);
-	if(!(*str = ft_strnew(MSH_BUFF_SIZE)))
-		cleanup(&msh, -1, "add_token");
 	if (!(msh->tok))
 	{
 		msh->tok = new;
