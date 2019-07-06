@@ -19,10 +19,12 @@ SRC_DIR=./src
 LIB_DIR=./libft
 OBJ_DIR=./obj
 
+HEADER=./includes/$(NAME).h
 SRC_NAME=main.c\
 	launch_programm.c\
 	process_env.c\
 	process_builtins.c\
+	process_tokens.c\
 	utils.c\
 	cleanup.c\
 	msh_env.c\
@@ -39,7 +41,7 @@ INC = -I ./includes -I $(LIB_DIR)/includes
 
 all: $(NAME)
 
-$(NAME) : $(OBJ) 
+$(NAME) : $(OBJ) $(HEADER)
 	@make -s -C $(LIB_DIR)
 	@$(CC) -o $(NAME) $(OBJ) $(LIB_DIR)/libft.a $(INC) -lpthread
 

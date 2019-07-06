@@ -23,7 +23,7 @@ void	launch_program(t_msh *msh)
     int	    status;
     int	    i;
 
-    if (!(msh->tokens) || check_buildins(msh))
+    if (!(msh->tokens) || !(msh->tokens[0]) || check_buildins(msh))
         return ;
     if ((pid = fork()) < 0)
     {
