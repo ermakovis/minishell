@@ -1,62 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_tokens.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/06 20:51:28 by tcase             #+#    #+#             */
+/*   Updated: 2019/07/06 21:22:04 by tcase            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	add_token(char **str, t_tok **tok, int *i)
+static void realloc_check(char **str, int i, int *buff_size, t_msh *msh)
 {
-	t_tok *new;
-	t_tok *tmp;
+	char *tmp;
 
-	*i = -1;
-	if (!str || !*str)
+	tmp = *str;
+	if (i < (*buff_size) - 1)
 		return ;
-	if (!(new = (t_tok*)malloc(sizeof(t_tok))))
-		return ;
-	ft_bzero(new, sizeof(t_tok));
-	new->token = ft_strdup(*str);
-	ft_memdel((void**)str);
-	*str = ft_strnew(2048);
-	if (!*tok)
+	*buff_size += MSH_BUFF_SIZE;
+	if (!(tmp = ft_notrealloc(tmp, i, (*buff_size)))) 
 	{
-		*tok = new;
-		return ;
+		ft_memdel((void**)str);
+		cleanup(&msh, -1, "Failed to realloc for command");
 	}
-	tmp = *tok;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
+	*str = tmp;
+}
+
+static void handle_single_quote(char **str, int *i, int *buff,  t_msh *msh)
+{
+	char	ch;
+
+	while ((ch = ft_getchar()) != '\'')
+	{
+		if (ch != 0) 
+			(*str)[++(*i)] = ch;
+		else
+			cleanup(&msh, -1, "No match for quotes\n");
+		if (ch == '\n')
+			ft_printf("quote> ");
+		realloc_check(str, ft_strlen(*str), buff, msh);
+	}
+}
+
+static void handle_double_quote(char **str, int *i, int *buff, t_msh *msh)
+{
+	char	ch;
+	
+	while ((ch = ft_getchar()) != '\"')
+	{
+		if (ch != 0) 
+			(*str)[++(*i)] = ch;
+		else
+			cleanup(&msh, -1, "No match for quotes\n");
+		if (ch == '\n')
+			ft_printf("dquote> ");
+		realloc_check(str, ft_strlen(*str), buff, msh);
+	}
 }
 
 int		process_tokens(t_msh *msh)
 {
 	int		i;
-	int		quot;
 	int		ch;
+	int		buff_size;
 	char	*str;
-	t_tok	*tok;
-	
+
 	i = -1;
-	quot = 0;
-	tok = NULL;
-	str = ft_strnew(2048);
+	buff_size = MSH_BUFF_SIZE;
+	if (!(str = ft_strnew(MSH_BUFF_SIZE)))
+		cleanup(&msh, -1, "Failed to malloc for token");
 	while((ch = ft_getchar()) >= 0) 
 	{
-		if (ch == 0 || (ch == '\n' && !quot))
+		if (ch == '\\' && (ch = ft_getchar()))
+			ch != '\n' ? str[++i] = ch : 1;
+		else if (ch == 0 || ch == '\n')
+			return(add_token(&str, &i, msh));
+		else if (ch == ' ')
 		{
-			add_token(&str, &tok, &i);
-			return 1;
+			if (i > 0)
+				add_token(&str, &i, msh);
 		}
-		if (ch == ' ')
-		{
-			ft_printf("%d\n", i);
-			str[i] ? add_token(&str, &tok, &i) : i++;
-			ft_printf("%d\n", i);
-		}
-		else if (ch == '\'' && !quot)
-		{
-			while ((ch = ft_getchar()) != '\'')
-				ch == 0 ? str[++i] = ch :\
-				cleanup(&msh, -1, "No match for quotes\n");
-		}
+		else if (ch == '\'')
+			handle_single_quote(&str, &i, &buff_size, msh);
+		else if (ch == '\"')
+			handle_double_quote(&str, &i, &buff_size, msh);
 		else
 			str[++i] = ch;
+		realloc_check(&str, ft_strlen(str), &buff_size, msh);
 	}
+	return (0);
 }

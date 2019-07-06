@@ -12,7 +12,8 @@ char	**copy_env(char **env)
 	i = -1;
 	while (env[++i])
 	{
-		new_env[i] = ft_strdup(env[i]);
+		if (!(new_env[i] = ft_strdup(env[i])))
+			clean_table(&new_env);
 	}
 	new_env[i] = NULL;
 	return (new_env);

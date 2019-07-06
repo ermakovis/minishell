@@ -41,9 +41,8 @@ char	*ft_notrealloc(char *old_ptr, int old_size, int new_size)
 
 	if (!old_ptr)
 		return (NULL);
-	if (!(new_ptr = (char*)malloc(new_size)))
+	if (!(new_ptr = ft_strnew(new_size)))
 		return (NULL);
-	ft_bzero(new_ptr, new_size);
 	ft_memcpy(new_ptr, old_ptr, old_size);
 	ft_memdel((void**)&old_ptr);
 	return (new_ptr);
