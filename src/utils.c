@@ -3,8 +3,8 @@
 int	ft_getchar(void)
 {
 	int ch;
-	int	ret;
 
+	ch = 0;
 	if (!(read(0, &ch, 1)))
 		return (-1);
 	return (ch);

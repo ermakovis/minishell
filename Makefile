@@ -6,7 +6,7 @@
 #    By: tcase <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 11:31:10 by tcase             #+#    #+#              #
-#    Updated: 2019/07/07 11:46:23 by tcase            ###   ########.fr        #
+#    Updated: 2019/07/07 17:11:33 by tcase            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC_NAME=main.c\
 	process_tokens_expans.c\
 	process_tokens_functions.c\
 	check_var.c\
+	find_executable.c\
 	utils.c\
 	cleanup.c\
 	msh_env.c\

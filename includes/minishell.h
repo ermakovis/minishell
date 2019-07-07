@@ -11,6 +11,7 @@
 //# define EOF -1
 # define MSH_BUFF_SIZE 2048
 
+typedef struct		stat t_stat;
 typedef struct	    s_bin t_bin;
 typedef struct	    s_msh t_msh;
 
@@ -49,6 +50,7 @@ void			check_var(t_msh *msh);
 
 void		    display_prompt(t_msh *msh);
 void		    launch_program(t_msh *msh);
+void			find_executable(t_msh *msh);
 void		    process_builtins(t_msh *msh);
 void		    process_env(char **env, t_msh **msh);
 int				process_tokens(t_msh *msh);
