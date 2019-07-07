@@ -6,7 +6,7 @@
 #    By: tcase <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 11:31:10 by tcase             #+#    #+#              #
-#    Updated: 2019/07/06 21:00:44 by tcase            ###   ########.fr        #
+#    Updated: 2019/07/07 11:46:23 by tcase            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ SRC_NAME=main.c\
 	process_env.c\
 	process_builtins.c\
 	process_tokens.c\
-	process_token_functions.c\
+	process_tokens_quotes.c\
+	process_tokens_expans.c\
+	process_tokens_functions.c\
 	check_var.c\
 	utils.c\
 	cleanup.c\

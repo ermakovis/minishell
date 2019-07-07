@@ -36,7 +36,6 @@ typedef struct		s_tok
 
 typedef	struct	    s_msh
 {
-	char		    *command;
 	char			**env;
 	char			**tokens;
 	t_bin			*bin;
@@ -53,12 +52,16 @@ void		    launch_program(t_msh *msh);
 void		    process_builtins(t_msh *msh);
 void		    process_env(char **env, t_msh **msh);
 int				process_tokens(t_msh *msh);
-int		    ft_getchar(void);
-int		    ft_tablesize(char **table);
+void			process_tokens_quotes(char **str, int *i, int ch, t_msh *msh);
+void			process_tokens_expans(char **str, int *i, int *ch, t_msh *msh);
+void			process_tokens_expans_dsign(char **str, int *i, int *ch, t_msh *msh);
+int				ft_getchar(void);
+int				ft_tablesize(char **table);
 char		    *parse_env(char *var, char **env);
 void		    cleanup(t_msh **msh, int exit_code, char *message);
 void		    clean_table(char ***table);
 void		    clean_tokens(t_tok **tok);
+void			realloc_check(char **str, int old_size, t_msh *msh);
 char		    *ft_notrealloc(char *old_ptr, int old_size, int new_size);
 void		    msh_env(t_msh *msh);
 void		    msh_setenv(t_msh *msh);

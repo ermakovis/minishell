@@ -6,13 +6,13 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 15:56:05 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/06 21:09:44 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/07 16:12:57 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_vars(t_msh *msh)
+static void	print_vars(t_msh *msh)
 {
 	t_var *tmp;
 
@@ -24,7 +24,7 @@ void	print_vars(t_msh *msh)
 	}
 }	
 
-void	add_var(char *var_name, char *value, t_msh *msh)
+static void	add_var(char *var_name, char *value, t_msh *msh)
 {
 	t_var	*var;
 	t_var	*tmp_var;
@@ -47,7 +47,28 @@ void	add_var(char *var_name, char *value, t_msh *msh)
 	tmp_var->next = var;
 }
 
-void	check_var(t_msh *msh)
+static int		set_var(char *var_name, char *value, t_msh *msh)
+{
+	t_var	*tmp;
+
+	if (!msh || !msh->var)
+		return (1);
+	tmp = msh->var;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->name, var_name))
+		{
+			ft_memdel((void**)&(tmp->value));
+			if (!(tmp->value = ft_strdup(value)))
+				cleanup(&msh, -1, "set_var");
+			return (0);
+		}
+		tmp = tmp->next;
+	}
+	return (1);
+}
+
+void		check_var(t_msh *msh)
 {
 	int		i;
 	char	*str;
@@ -58,9 +79,9 @@ void	check_var(t_msh *msh)
 	str = msh->tok->token;
 	if ((i = ft_strchrlen(str, '=')) == -1)
 		return ;
-	ft_printf("i - %d\n", i);
 	str[i] = '\0';
-	add_var(str, str + i + 1, msh);
+	if (set_var(str, str + i + 1, msh))
+		add_var(str, str + i + 1, msh);
 	pop_token(msh);
 	print_vars(msh);
 	

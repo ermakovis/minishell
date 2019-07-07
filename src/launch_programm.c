@@ -71,6 +71,7 @@ void	launch_program(t_msh *msh)
 	int	    status;
 
 	check_var(msh);
+	find_executable(msh);
 	process_tokens_list(msh);
 	print_table(msh->tokens);
 	if (!(msh->tokens) || !(msh->tokens[0]) || check_buildins(msh));
