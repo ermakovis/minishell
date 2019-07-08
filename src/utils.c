@@ -48,7 +48,7 @@ char	*ft_notrealloc(char *old_ptr, int old_size, int new_size)
 	return (new_ptr);
 }
 
-void	display_prompt(t_msh *msh)
+void	display_prompt()
 {
 	char	*home;
 	char	*pwd;
@@ -56,8 +56,8 @@ void	display_prompt(t_msh *msh)
 
 	if (!isatty(0))
 		return ;
-	home = parse_env("HOME=", msh->env);
-	pwd = parse_env("PWD=", msh->env);
+	home = parse_env("HOME=", g_msh->env);
+	pwd = parse_env("PWD=", g_msh->env);
 	home_len = ft_strlen(home);
 	if (ft_strnequ(pwd, home, home_len))
 	{

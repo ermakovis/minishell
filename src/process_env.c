@@ -19,14 +19,14 @@ char	**copy_env(char **env)
 	return (new_env);
 }
 
-void	    process_env(char **env, t_msh **msh)
+void	    process_env(char **env)
 {
-	t_msh	*new_msh;
+	t_msh	    *new_msh;
 	int	    i = -1;
 
 	if (!(new_msh = malloc(sizeof(t_msh))))
 		return ;
 	ft_bzero(new_msh, sizeof(t_msh));
 	new_msh->env = copy_env(env);
-	*msh = new_msh;
+	g_msh = new_msh;
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	add_builtin(char *name, void (*func)(t_msh*), t_bin **bin)
+void	add_builtin(char *name, void (*func)(), t_bin **bin)
 {
 	t_bin *new;
 	t_bin *tmp;
@@ -22,7 +22,7 @@ void	add_builtin(char *name, void (*func)(t_msh*), t_bin **bin)
 	tmp->next = new;
 }
 
-void	process_builtins(t_msh *msh)
+void	process_builtins()
 {
 	t_bin   *new;
 
@@ -31,5 +31,5 @@ void	process_builtins(t_msh *msh)
 	add_builtin("setenv", &msh_setenv, &new);
 	add_builtin("unsetenv", &msh_unsetenv, &new);
 	add_builtin("exit", &msh_exit, &new);
-	msh->bin = new;
+	g_msh->bin = new;
 }

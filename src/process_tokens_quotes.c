@@ -24,7 +24,7 @@ void	process_tokens_bslash(char **str, int *i)
 		ft_printf("bslash> ");
 }
 
-void	process_tokens_squote(char **str, int *i, t_msh *msh)
+void	process_tokens_squote(char **str, int *i)
 {
 	int	ch;
 
@@ -33,43 +33,42 @@ void	process_tokens_squote(char **str, int *i, t_msh *msh)
 		if (ch != 0) 
 			(*str)[++(*i)] = ch;
 		else
-			cleanup(&msh, -1, "No match for quotes\n");
+			cleanup(-1, "No match for quotes\n");
 		if (ch == '\n')
 			ft_printf("quote> ");
-		realloc_check(str, *i + 1, msh);
+		realloc_check(str, *i + 1);
 	}
 }
 
-void	process_tokens_dquote(char **str, int *i, t_msh *msh)
+void	process_tokens_dquote(char **str, int *i)
 {
 	int	ch;
 
 	while ((ch = ft_getchar()) >= 0)
 	{
 		if (ch == '$')
-			process_tokens_expans_dsign(str, i, &ch, msh);
+			process_tokens_expans_dsign(str, i, &ch);
 		if (ch == '\"')
 			return ;
-		ft_printf("%c\n", ch);
 		if (ch == '\\')
 			process_tokens_bslash(str, i);
 		else if (ch != 0) 
 			(*str)[++(*i)] = ch;
 		else
-			cleanup(&msh, -1, "No match for quotes\n");
+			cleanup(-1, "No match for quotes\n");
 		if (ch == '\n')
 			ft_printf("dquote> ");
-		realloc_check(str, *i + 1, msh);
+		realloc_check(str, *i + 1);
 	}
 }
 
-void	process_tokens_quotes(char **str, int *i, int ch, t_msh *msh)
+void	process_tokens_quotes(char **str, int *i, int ch)
 {
 	if (ch == '\\')
 		process_tokens_bslash(str, i);
 	else if (ch == '\"')
-		process_tokens_dquote(str, i, msh);
+		process_tokens_dquote(str, i);
 	else if (ch == '\'')
-		process_tokens_squote(str, i, msh);
+		process_tokens_squote(str, i);
 
 }

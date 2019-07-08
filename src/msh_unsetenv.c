@@ -1,22 +1,22 @@
 #include "minishell.h"
 
-static int	    calc_realloc_size(t_msh *msh)
+static int	    calc_realloc_size()
 {
     int	    i;
     char    *var;
 
     i = 0;
-    while (msh->env[i])
+    while (g_msh->env[i])
 	i++;
-    if (!(var = ft_strjoin(msh->tokens[1], "=")))
-	cleanup(&msh, -1, "Failed to joint strings");
-    if (!(parse_env(var, msh->env)))
+    if (!(var = ft_strjoin(g_msh->tokens[1], "=")))
+	cleanup(-1, "Failed to joint strings");
+    if (!(parse_env(var, g_msh->env)))
 	i--;
     ft_memdel((void**)&var);
     return (i);
 }
 
-static void	    unset_env(t_msh *msh)
+static void	    unset_env()
 {
     int	    i;
     char    *var;
@@ -25,35 +25,35 @@ static void	    unset_env(t_msh *msh)
     int	    size;
 
     i = -1;
-    size = calc_realloc_size(msh);
-    if (!(var = ft_strjoin(msh->tokens[1], "=")))
-	cleanup(&msh, -1, "Failed to joint strings");
+    size = calc_realloc_size(g_msh);
+    if (!(var = ft_strjoin(g_msh->tokens[1], "=")))
+	cleanup(-1, "Failed to joint strings");
     var_len = ft_strlen(var);
     if (!(new = (char**)malloc(sizeof(char*) * (size + 1))))
-        cleanup(&msh, -1, "Failed to realloc for new env");
+        cleanup(-1, "Failed to realloc for new env");
     ft_bzero(new, sizeof(char*) * (size + 1));
-    while (msh->env[++i])
+    while (g_msh->env[++i])
     {
-        if (!(ft_strnequ(msh->env[i], var, var_len)))
-            new[i] = ft_strdup(msh->env[i]);
+        if (!(ft_strnequ(g_msh->env[i], var, var_len)))
+            new[i] = ft_strdup(g_msh->env[i]);
     }
-    clean_table(&(msh->env));
+    clean_table(&(g_msh->env));
     ft_memdel((void**)&var);
-    msh->env = new;
+    g_msh->env = new;
 }
 
-void	    msh_unsetenv(t_msh *msh)
+void	    msh_unsetenv()
 {
     char *var;
 
-    if (!msh->tokens[1])
+    if (!g_msh->tokens[1])
     {
 	ft_printf("unsetenv: Too few arguments\n");
 	return ;
     }
-    if (!(var = ft_strjoin(msh->tokens[1], "=")))
-	cleanup(&msh, -1, "Failed to joint strings");
-    if (parse_env(var, msh->env))
-	unset_env(msh);
+    if (!(var = ft_strjoin(g_msh->tokens[1], "=")))
+	cleanup(-1, "Failed to joint strings");
+    if (parse_env(var, g_msh->env))
+	unset_env();
     ft_memdel((void**)&var);
 }

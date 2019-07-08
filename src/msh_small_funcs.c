@@ -1,7 +1,7 @@
 #include "minishell.h"
 
-void	msh_exit(t_msh *msh)
+void	msh_exit()
 {
-    cleanup(&msh, 0, NULL);
+    cleanup(0, NULL);
     exit (1);
 }

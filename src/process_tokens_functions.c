@@ -12,19 +12,19 @@
 
 #include "minishell.h"
 
-void	pop_token(t_msh *msh)
+void	pop_token()
 {
 	t_tok *next;
 
-	if (!msh || !(msh->tok) || !(msh->tok->token))
+	if (!g_msh || !(g_msh->tok) || !(g_msh->tok->token))
 		return ;
-	next = msh->tok->next;
-	ft_memdel((void**)&(msh->tok->token));
-	ft_memdel((void**)&(msh->tok));
-	msh->tok = next;
+	next = g_msh->tok->next;
+	ft_memdel((void**)&(g_msh->tok->token));
+	ft_memdel((void**)&(g_msh->tok));
+	g_msh->tok = next;
 }
 
-int		add_token(char **str, int *i, t_msh *msh)
+int		add_token(char **str, int *i)
 {
 	t_tok	*new;
 	t_tok	*tmp;
@@ -33,16 +33,16 @@ int		add_token(char **str, int *i, t_msh *msh)
 	if (ft_strlen(*str) < 1)
 		return (1) ;
 	if (!(new = (t_tok*)malloc(sizeof(t_tok))))
-		cleanup(&msh, -1, "Token malloc failed");
+		cleanup(-1, "Token malloc failed");
 	ft_bzero(new, sizeof(t_tok));
 	new->token = ft_strdup(*str);
 	ft_memdel((void**)str);
-	if (!(msh->tok))
+	if (!(g_msh->tok))
 	{
-		msh->tok = new;
+		g_msh->tok = new;
 		return (1);
 	}
-	tmp = msh->tok;
+	tmp = g_msh->tok;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;

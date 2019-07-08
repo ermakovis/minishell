@@ -11,18 +11,15 @@ void	handle_sigint(int signo)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_msh   *msh;
-
-	msh = NULL;
 	signal(SIGINT, handle_sigint);
-	process_env(env, &msh);
-	process_builtins(msh);
-	display_prompt(msh);
-	while (process_tokens(msh))
+	process_env(env);
+	process_builtins();
+	display_prompt();
+	while (process_tokens())
 	{
-		launch_program(msh);
-		display_prompt(msh);
+		launch_program();
+		display_prompt();
 	}
-	cleanup(&msh, 0, NULL);
+	cleanup(0, NULL);
 }
 
