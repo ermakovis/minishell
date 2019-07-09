@@ -2,6 +2,7 @@
 # define MINISHELL_H
 # include "libft.h"
 # include <limits.h>
+# include <termios.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/types.h>
