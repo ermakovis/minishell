@@ -21,21 +21,12 @@ OBJ_DIR=./obj
 
 HEADER=./includes/$(NAME).h
 SRC_NAME=main.c\
-	launch_programm.c\
+	init_msh.c\
 	process_env.c\
 	process_builtins.c\
-	process_tokens.c\
-	process_tokens_quotes.c\
-	process_tokens_expans.c\
-	process_tokens_functions.c\
-	check_var.c\
-	find_executable.c\
-	utils.c\
-	cleanup.c\
-	msh_env.c\
-	msh_setenv.c\
-	msh_unsetenv.c\
+	read_line.c\
 	msh_small_funcs.c\
+	cleanup.c
 
 OBJ_NAME=$(SRC_NAME:.c=.o)
 
@@ -48,7 +39,7 @@ all: $(NAME)
 
 $(NAME) : $(OBJ) $(HEADER)
 	@make -s -C $(LIB_DIR)
-	@$(CC) -o $(NAME) $(OBJ) $(LIB_DIR)/libft.a $(INC) -lpthread
+	@$(CC) -o $(NAME) $(OBJ) $(LIB_DIR)/libft.a $(INC) -lcurses
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p obj

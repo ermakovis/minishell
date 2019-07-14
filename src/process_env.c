@@ -1,32 +1,29 @@
 #include "minishell.h"
 
-char	**copy_env(char **env)
+static void	    print_list(t_list *list)
 {
-	int		i;
-	char	**new_env;
-
-	i = -1;
-	while(env[++i]);
-	if (!(new_env = (char**)malloc(sizeof(char*) * (i + 1))))
-		return (NULL);
-	i = -1;
-	while (env[++i])
-	{
-		if (!(new_env[i] = ft_strdup(env[i])))
-			clean_table(&new_env);
-	}
-	new_env[i] = NULL;
-	return (new_env);
+    ft_printf("%s\n", list->content);
 }
 
-void	    process_env(char **env)
+void	    delete_env(void *content, size_t size)
 {
-	t_msh	    *new_msh;
-	int	    i = -1;
+    ft_memdel(&content);
+    size = 0;
+}
 
-	if (!(new_msh = malloc(sizeof(t_msh))))
-		return ;
-	ft_bzero(new_msh, sizeof(t_msh));
-	new_msh->env = copy_env(env);
-	g_msh = new_msh;
+void		    process_env(char **env)
+{
+    t_list	*env_list;
+    t_list	*new;
+    int	    i;
+
+    i = -1;
+    env_list = NULL;
+    while(env[++i])
+    {
+	if (!(new = ft_lstnew(env[i], ft_strlen(env[i]) + 1)))
+	    cleanup(-1, "Failed to process env variables\n");
+	ft_lstadd(&env_list, new); 
+    }
+    g_msh->env = env_list;
 }

@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft.h"
+# include <term.h>
+# include <curses.h>
 # include <limits.h>
 # include <termios.h>
 # include <stdlib.h>
@@ -9,69 +11,88 @@
 # include <sys/wait.h>
 # include <stdio.h>
 
-//# define EOF -1
 # define MSH_BUFF_SIZE 2048
+# define LEFT	4479771
+# define RIGHT	4414235
+# define UP	4283163
+# define DOWN	4348699
+# define DELETE	2117294875
+# define BSPACE 127
 
+typedef	struct	    termios	t_term;
+typedef struct	    stat	t_stat;
 
-
-typedef struct	    stat t_stat;
-typedef struct	    s_bin t_bin;
-typedef struct	    s_msh t_msh;
-
-typedef struct		s_var
+typedef struct	    s_cmd
 {
-    char			*name;
-    char			*value;
-    struct s_var	*next;
-}					t_var;
+    char	    *left;
+    char	    *right;
+    char	    *del;
+    char	    *insert_mode_on;
+    char	    *insert_mode_off;
+}		    t_cmd;
+
+typedef struct	    s_rl
+{
+    char	    *line;
+    size_t	    line_len;
+    size_t	    cur_pos;
+}		    t_rl;
 
 typedef struct	    s_bin
 {
-    char			*name;
-    void			(*func)();
-    struct s_bin    *next;
-}					t_bin;
+    char	    *name;
+    void	    (*func)(void);
+}		    t_bin;
 
-typedef struct		s_tok
+typedef struct	    s_msh
 {
-    char			*token;
-    struct s_tok	*next;	
-}					t_tok;
+    t_rl	    *rl;
+    t_cmd	    *cmd;
+    t_term	    *original_state;
+    t_list	    *env;
+    t_list	    *bin;
+}		    t_msh;
 
-typedef	struct	    s_msh
-{
-    char			**env;
-    char			**tokens;
-    t_bin			*bin;
-    t_tok			*tok;
-    t_var			*var;
-}					t_msh;
+t_msh		    *g_msh;
 
-t_msh	*g_msh;
+/*
+**  main.c
+*/
+void		     set_terminal_canon(void);
+void		     set_terminal_raw(void);
 
-int		    add_token(char **str, int *i);
-void		    pop_token();
-void		    check_var();
+/*
+**  init_msh.c
+*/
+void		    init_msh(void);
 
-void		    display_prompt();
-void		    launch_program();
-void		    find_executable();
-void		    process_builtins();
+/*
+**  process_env.c	    
+*/
 void		    process_env(char **env);
-int		    process_tokens();
-void		    process_tokens_quotes(char **str, int *i, int ch);
-void		    process_tokens_expans(char **str, int *i, int *ch);
-void		    process_tokens_expans_dsign(char **str, int *i, int *ch);
-int		    ft_getchar(void);
-int		    ft_tablesize(char **table);
-char		    *parse_env(char *var, char **env);
+void		    delete_env(void *content, size_t size);
+
+/*
+**  process_builtins.c
+*/
+void		    process_builtins(void);
+void		    delete_builtins(void *content, size_t size);
+
+/*
+**  read_line.c
+*/
+int		    read_line(void);
+int		    get_char(long *ch);
+
+/*
+**  msh_small_funcs.c
+*/
+void		    msh_env(void);
+void		    msh_exit(void);
+
+/*
+**  cleanup.c
+*/
 void		    cleanup(int exit_code, char *message);
-void		    clean_table(char ***table);
-void		    clean_tokens(t_tok **tok);
-void		    realloc_check(char **str, int old_size);
-char		    *ft_notrealloc(char *old_ptr, int old_size, int new_size);
-void		    msh_env();
-void		    msh_setenv();
-void		    msh_unsetenv();
-void		    msh_exit();
+
 #endif

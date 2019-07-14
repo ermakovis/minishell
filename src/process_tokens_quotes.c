@@ -12,63 +12,54 @@
 
 #include "minishell.h"
 
-void	process_tokens_bslash(char **str, int *i)
+void	process_tokens_bslash(char **str, int *i, char **line)
 {
-	int	ch;
+    (*line)++;
+    if (!(**line))
+	return ;
+    if (**line != '\n')
+	(*str)[++(*i)] = **line;
+}
 
-	if (!(ch = ft_getchar()))
-		return ;
-	if (ch != '\n')
-		(*str)[++(*i)] = ch;
+void	process_tokens_squote(char **str, int *i, char **line)
+{
+    while (**line)
+    {
+	if (**line != 0) 
+	    (*str)[++(*i)] = **line;
 	else
-		ft_printf("bslash> ");
+	    cleanup(-1, "No match for quotes\n");
+	realloc_check(str, *i + 1);
+	(*line)++;
+    }
 }
 
-void	process_tokens_squote(char **str, int *i)
+void	process_tokens_dquote(char **str, int *i, char **line)
 {
-	int	ch;
-
-	while ((ch = ft_getchar()) != '\'')
-	{
-		if (ch != 0) 
-			(*str)[++(*i)] = ch;
-		else
-			cleanup(-1, "No match for quotes\n");
-		if (ch == '\n')
-			ft_printf("quote> ");
-		realloc_check(str, *i + 1);
-	}
+    while (**line)
+    {
+	if (**line == '$')
+	    process_tokens_expans_dsign(str, i, line);
+	if (**line == '\"')
+	    return ;
+	if (**line == '\\')
+	    process_tokens_bslash(str, i, line);
+	else if (*line != 0) 
+	    (*str)[++(*i)] = **line;
+	else
+	    cleanup(-1, "No match for quotes\n");
+	realloc_check(str, *i + 1);
+	(*line)++;
+    }
 }
 
-void	process_tokens_dquote(char **str, int *i)
+void	process_tokens_quotes(char **str, int *i, char **line)
 {
-	int	ch;
-
-	while ((ch = ft_getchar()) >= 0)
-	{
-		if (ch == '$')
-			process_tokens_expans_dsign(str, i, &ch);
-		if (ch == '\"')
-			return ;
-		if (ch == '\\')
-			process_tokens_bslash(str, i);
-		else if (ch != 0) 
-			(*str)[++(*i)] = ch;
-		else
-			cleanup(-1, "No match for quotes\n");
-		if (ch == '\n')
-			ft_printf("dquote> ");
-		realloc_check(str, *i + 1);
-	}
-}
-
-void	process_tokens_quotes(char **str, int *i, int ch)
-{
-	if (ch == '\\')
-		process_tokens_bslash(str, i);
-	else if (ch == '\"')
-		process_tokens_dquote(str, i);
-	else if (ch == '\'')
-		process_tokens_squote(str, i);
+    if (**line == '\\')
+	process_tokens_bslash(str, i, line);
+    else if (**line == '\"')
+	process_tokens_dquote(str, i, line);
+    else if (**line == '\'')
+	process_tokens_squote(str, i, line);
 
 }

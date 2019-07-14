@@ -1,35 +1,57 @@
 #include "minishell.h"
 
-void	add_builtin(char *name, void (*func)(), t_bin **bin)
+void	delete_builtins(void *content, size_t size)
 {
-	t_bin *new;
-	t_bin *tmp;
+    t_bin *bin;
 
-	if (!(new = (t_bin*)malloc(sizeof(t_bin))))
-		return ;
-	ft_bzero(new, sizeof(t_bin));
-	new->name = ft_strdup(name);
-	new->func = func;
-	new->next = NULL;
-	if (!*bin)
-	{
-		*bin = new;
-		return ;
-	}
-	tmp = *bin;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
+    bin = content;
+    bin->func = NULL;
+    ft_memdel((void**)&(bin->name));
+    ft_memdel(&content);
+    size = 0;
 }
 
-void	process_builtins()
+static t_bin	*create_builtin(char *name, void (*func)(void))
 {
-	t_bin   *new;
+    t_bin   *new;
 
-	new = NULL;
-	add_builtin("env", &msh_env, &new);
-	add_builtin("setenv", &msh_setenv, &new);
-	add_builtin("unsetenv", &msh_unsetenv, &new);
-	add_builtin("exit", &msh_exit, &new);
-	g_msh->bin = new;
+    if (!(new = (t_bin*)malloc(sizeof(t_bin))))
+	cleanup(-1, "Malloc failed at create_builtin");
+    if (!(new->name = ft_strdup(name)))
+	cleanup(-1, "Malloc failed at create_builtin 2");
+    new->func = func;
+}
+
+static void	add_builtin(char *name, void (*func)(void), t_list **bin)
+{
+    t_list  *new_list;
+    t_bin   *new_bin;
+    size_t  size;
+
+    size = sizeof(t_bin);
+    new_bin = create_builtin(name, func);
+    if (!(new_list = ft_lstnew(new_bin, size)))
+	cleanup(-1, "Malloc failed at add_buildin");	
+    ft_lstadd(bin, new_list);
+    ft_memdel((void**)&new_bin);
+
+}
+
+void	print_builtins(t_list *list)
+{
+    t_bin *bin;
+
+    bin = list->content;
+    ft_printf("%s\n", bin->name);
+}
+
+void		process_builtins(void)
+{
+    t_list   *bin;
+
+    bin = NULL;
+    add_builtin("env", &msh_env, &bin);
+    add_builtin("exit", &msh_exit, &bin);
+//    ft_lstiter(bin, &print_builtins);
+    g_msh->bin = bin;
 }

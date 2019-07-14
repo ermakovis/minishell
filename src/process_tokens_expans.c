@@ -34,20 +34,20 @@ static void		append_str(char **str, int *i, char *new)
     }
 }
 
-void		process_tokens_expans_tild(char **str, int *i, int *ch)
+void		process_tokens_expans_tild(char **str, int *i, char **line)
 {
     if ((*str)[*i] != 0) 
 	return ;
-    *ch = ft_getchar();
-    if (*ch == '+')
+    (*line)++;
+    if (**line == '+')
 	append_str(str, i, parse_env("PWD=", g_msh->env));
-    else if (*ch == '-')
+    else if (**line == '-')
 	append_str(str, i, parse_env("OLDPWD=", g_msh->env));
     else 
 	append_str(str, i, parse_env("HOME=", g_msh->env));
-    if (*ch == '\\')
+    if (**line == '\\')
 	(*str)[++(*i)] = '\\';
-    if ((*ch == '+' || *ch == '-') && (*ch = ft_getchar()) == '\\')
+    if ((**line == '+' || **line == '-') && *((*line)++) == '\\')
 	(*str)[++(*i)] = '\\';
 }
 
@@ -69,29 +69,30 @@ void		process_tokens_expans_dsign_append(char **str,\
 }
 
 void		process_tokens_expans_dsign(char **str, int *i,\
-	int *ch)
+	char **line)
 {
     int		j;
     char	var_name[NAME_MAX];
 
     j = 0;
     ft_bzero(var_name, NAME_MAX);
-    while (((*ch) = ft_getchar()))
+    while (**line)
     {
-	if (is_special(*ch))
+	if (is_special(**line))
 	    break ;
-	var_name[j] = *ch;
+	var_name[j] = **line;
 	if (++j == NAME_MAX)
 	    cleanup(-1, "Too long var name");
+	(*line)++;
     }
     process_tokens_expans_dsign_append(str, i, var_name);
 }
 
-void			process_tokens_expans(char **str, int *i, int *ch)
+void			process_tokens_expans(char **str, int *i, char **line)
 {
-    if (*ch == '~')
-	process_tokens_expans_tild(str, i, ch);
-    while(*ch == '$')
-	process_tokens_expans_dsign(str, i, ch);	
+    if (**line == '~')
+	process_tokens_expans_tild(str, i, line);
+    while(**line == '$')
+	process_tokens_expans_dsign(str, i, line);	
 
 }
