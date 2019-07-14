@@ -25,7 +25,11 @@ SRC_NAME=main.c\
 	process_env.c\
 	process_builtins.c\
 	read_line.c\
+	rl_input_manipulation.c\
+	parser.c\
+	pr_expans.c\
 	msh_small_funcs.c\
+	utils.c\
 	cleanup.c
 
 OBJ_NAME=$(SRC_NAME:.c=.o)

@@ -38,6 +38,12 @@ typedef struct	    s_rl
     size_t	    cur_pos;
 }		    t_rl;
 
+typedef struct	    s_var
+{
+    char	    *name;
+    char	    *value;
+}		    t_var;
+
 typedef struct	    s_bin
 {
     char	    *name;
@@ -49,8 +55,11 @@ typedef struct	    s_msh
     t_rl	    *rl;
     t_cmd	    *cmd;
     t_term	    *original_state;
+    t_list	    *tok;
+    t_list	    *var;
     t_list	    *env;
     t_list	    *bin;
+    t_list	    *history;
 }		    t_msh;
 
 t_msh		    *g_msh;
@@ -70,7 +79,10 @@ void		    init_msh(void);
 **  process_env.c	    
 */
 void		    process_env(char **env);
-void		    delete_env(void *content, size_t size);
+void		    add_var(char *name, char *value);
+void		    delete_var(void *content, size_t size);
+void		    print_var(t_list *list);
+char		    *find_var(t_list *list, char *var_name);
 
 /*
 **  process_builtins.c
@@ -85,10 +97,39 @@ int		    read_line(void);
 int		    get_char(long *ch);
 
 /*
+**  rl_input_manipulation.c
+*/
+void		    rl_print_char(char ch);
+void		    rl_move_cur(long ch);
+void		    rl_del_char(long ch);
+
+/*
+**  parser.c
+*/
+void		   parse_line(void); 
+void		    delete_str(void *content, size_t size);
+void		    printl_str(t_list *list);
+
+/*
+**  pr_expans.c
+*/
+void		    pr_expans_dsign(char **token, int *i, char **line);
+void		    pr_expans_tild(char **token, int *i, char **line);
+void		    pr_expans(char **token, int *i, char **line);
+
+/*
 **  msh_small_funcs.c
 */
 void		    msh_env(void);
 void		    msh_exit(void);
+
+/*
+**  utils.c
+*/
+void		    realloc_check(char **old_ptr, size_t old_size);
+void		    ft_notrealloc(char **old_ptr, size_t old_size, size_t new_size);
+void		    display_prompt(void);
+void		    append_str(char **str, int *i, char *new);
 
 /*
 **  cleanup.c

@@ -53,10 +53,12 @@ int	main(int argc, char **argv, char **env)
     process_env(env);
     process_builtins();
     set_terminal_raw();
-    //display_prompt();
+    display_prompt();
     while (read_line())
     {
-	ft_printf("|%s|\n", g_msh->rl->line);
+	parse_line();
+	ft_lstiter(g_msh->tok, &printl_str);
+	display_prompt();
     }
     set_terminal_canon();
     cleanup(0, NULL);

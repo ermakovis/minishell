@@ -20,9 +20,10 @@ static t_bin	*create_builtin(char *name, void (*func)(void))
     if (!(new->name = ft_strdup(name)))
 	cleanup(-1, "Malloc failed at create_builtin 2");
     new->func = func;
+    return (new);
 }
 
-static void	add_builtin(char *name, void (*func)(void), t_list **bin)
+static void	add_builtin(char *name, void (*func)(void))
 {
     t_list  *new_list;
     t_bin   *new_bin;
@@ -32,9 +33,8 @@ static void	add_builtin(char *name, void (*func)(void), t_list **bin)
     new_bin = create_builtin(name, func);
     if (!(new_list = ft_lstnew(new_bin, size)))
 	cleanup(-1, "Malloc failed at add_buildin");	
-    ft_lstadd(bin, new_list);
+    ft_lstadd(&(g_msh->bin), new_list);
     ft_memdel((void**)&new_bin);
-
 }
 
 void	print_builtins(t_list *list)
@@ -47,11 +47,7 @@ void	print_builtins(t_list *list)
 
 void		process_builtins(void)
 {
-    t_list   *bin;
-
-    bin = NULL;
-    add_builtin("env", &msh_env, &bin);
-    add_builtin("exit", &msh_exit, &bin);
-//    ft_lstiter(bin, &print_builtins);
-    g_msh->bin = bin;
+    add_builtin("env", &msh_env);
+    add_builtin("exit", &msh_exit);
+    //ft_lstiter(g_msh->bin, &print_builtins);
 }

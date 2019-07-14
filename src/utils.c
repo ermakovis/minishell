@@ -1,71 +1,42 @@
 #include "minishell.h"
 
-int	ft_getchar(void)
+void realloc_check(char **old_ptr, size_t old_size)
 {
-    int ch;
-    int ret;
+    size_t  new_size;
+    char    *new_str;
 
-    ch = 0;
-    if ((ret = read(0, &ch, 1)) < 0)
-	return (ret);
-    return (ch);
-}
-void realloc_check(char **str, int old_size)
-{
-    int		new_size;
-    char	*tmp;
-
-    if (!old_size || old_size % MSH_BUFF_SIZE != 0)
+    if (!old_ptr || !*old_ptr || old_size % MSH_BUFF_SIZE != 0)
 	return ;
-    tmp = *str;
     new_size = ((old_size / MSH_BUFF_SIZE) + 1) * MSH_BUFF_SIZE;
-    if (!(tmp = ft_notrealloc(tmp, old_size, new_size))) 
-    {
-	ft_memdel((void**)str);
-	cleanup(-1, "Failed to realloc for command");
-    }
-    *str = tmp;
+    ft_notrealloc(old_ptr, old_size, new_size);
 }
 
-int	ft_tablesize(char **table)
+void	ft_notrealloc(char **old_ptr, size_t old_size, size_t new_size)
 {
-    int	    i;
+    char    *new_ptr;
 
-    i = 0;
-    while (table[i])
-	i++;
-    return (i);
-}
-
-char	*parse_env(char *var, char **env)
-{
-    int		i;
-    int		var_len;
-
-    i = -1;
-    var_len = ft_strlen(var);
-    while (env[++i])
-    {
-	if (ft_strnequ(env[i], var, var_len))
-	    return(env[i] + var_len);
-    }
-    return (NULL);
-}
-
-char	*ft_notrealloc(char *old_ptr, int old_size, int new_size)
-{
-    char *new_ptr;
-
-    if (!old_ptr)
-	return (NULL);
+    if (!old_ptr || !*old_ptr)
+	return ;
     if (!(new_ptr = ft_strnew(new_size)))
-	return (NULL);
-    ft_memcpy(new_ptr, old_ptr, old_size);
-    ft_memdel((void**)&old_ptr);
-    return (new_ptr);
+	cleanup(-1, "Failed to realloc");
+    ft_memcpy(new_ptr, *old_ptr, old_size);
+    ft_memdel((void**)old_ptr);
+    *old_ptr = new_ptr;
 }
 
-void	display_prompt()
+void	append_str(char **str, int *i, char *new)
+{
+    int	    j;
+
+    j = -1;
+    while (new[++j])
+    {
+	realloc_check(str, *i + 1);
+	(*str)[(*i)++] = new[j];
+    }
+}
+
+void	display_prompt(void)
 {
     char	*home;
     char	*pwd;
@@ -73,8 +44,8 @@ void	display_prompt()
 
     if (!isatty(0))
 	return ;
-    home = parse_env("HOME=", g_msh->env);
-    pwd = parse_env("PWD=", g_msh->env);
+    home = find_var(g_msh->env, "HOME");
+    pwd = find_var(g_msh->env, "PWD");
     home_len = ft_strlen(home);
     if (ft_strnequ(pwd, home, home_len))
     {

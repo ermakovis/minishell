@@ -1,29 +1,70 @@
 #include "minishell.h"
 
-static void	    print_list(t_list *list)
+void	    add_var(char *name, char *value)
 {
-    ft_printf("%s\n", list->content);
+    t_list  *new_list;
+    t_var   *new;
+    size_t  size;
+
+    size = sizeof(t_var);
+    if (!(new = (t_var*)malloc(size)))
+	cleanup(-1, "Malloc failed at create_var");
+    if (!(new->name = ft_strdup(name)))
+	cleanup(-1, "Malloc failed at create_var 2");
+    if (!(new->value = ft_strdup(value)))
+	cleanup(-1, "Malloc failed at create_var 3");
+    if (!(new_list = ft_lstnew(new, size)))
+	cleanup(-1, "Malloc failed at create_var 4");
+    ft_lstadd(&(g_msh->env), new_list);
 }
 
-void	    delete_env(void *content, size_t size)
+void	    print_var(t_list *list)
 {
+    t_var *var;
+
+    var = list->content;
+    ft_printf("%s - %s\n", var->name, var->value);
+}
+
+void	    delete_var(void *content, size_t size)
+{
+    t_var   *var;
+
+    var = content;
+    ft_memdel((void**)&(var->name));
+    ft_memdel((void**)&(var->value));
     ft_memdel(&content);
     size = 0;
 }
 
+char	    *find_var(t_list *list, char *var_name)
+{
+    t_var   *var;
+
+    while (list)
+    {
+	var = list->content;
+	if (!ft_strcmp(var->name, var_name))
+	    return (var->value);
+	list = list->next;
+    }
+    return (NULL);
+}
+
 void		    process_env(char **env)
 {
-    t_list	*env_list;
     t_list	*new;
-    int	    i;
+    t_var	*var;
+    int		i;
+    size_t	equal_pos;
 
     i = -1;
-    env_list = NULL;
     while(env[++i])
     {
-	if (!(new = ft_lstnew(env[i], ft_strlen(env[i]) + 1)))
-	    cleanup(-1, "Failed to process env variables\n");
-	ft_lstadd(&env_list, new); 
+	if ((equal_pos = ft_strchrlen(env[i], '=')) == -1)
+	    continue ;
+	env[i][equal_pos] = '\0';
+	add_var(&(env[i][0]), &(env[i][equal_pos + 1]));
     }
-    g_msh->env = env_list;
+//    ft_lstiter(g_msh->env, &print_var);
 }
