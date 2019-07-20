@@ -21,13 +21,16 @@ OBJ_DIR=./obj
 
 HEADER=./includes/$(NAME).h
 SRC_NAME=main.c\
-	init_msh.c\
-	process_env.c\
-	process_builtins.c\
+	init.c\
+	init_env.c\
+	init_bins.c\
 	read_line.c\
 	rl_input_manipulation.c\
 	parser.c\
 	pr_expans.c\
+	pr_quotes.c\
+	launch_programm.c\
+	find_executable.c\
 	msh_small_funcs.c\
 	utils.c\
 	cleanup.c

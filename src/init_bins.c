@@ -45,7 +45,7 @@ void	print_builtins(t_list *list)
     ft_printf("%s\n", bin->name);
 }
 
-void		process_builtins(void)
+void		init_bins(void)
 {
     add_builtin("env", &msh_env);
     add_builtin("exit", &msh_exit);

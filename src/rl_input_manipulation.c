@@ -22,6 +22,7 @@ void	    rl_move_cur(long ch)
 {
     t_rl    *rl;
 
+
     rl = g_msh->rl;
     if (ch == LEFT && rl->cur_pos > 0 && rl->line[rl->cur_pos - 1] != '\n')
     {

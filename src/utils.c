@@ -1,11 +1,25 @@
 #include "minishell.h"
 
+void	ft_free_table(char ***table)
+{
+    char    **tmp;
+    int	    i;
+
+    if (!table || !*table)
+	return ;
+    i = -1;
+    tmp = *table;
+    while (tmp[++i])
+	ft_memdel((void**)&tmp[i]);
+    ft_memdel((void**)table);
+}
+
 void realloc_check(char **old_ptr, size_t old_size)
 {
     size_t  new_size;
     char    *new_str;
 
-    if (!old_ptr || !*old_ptr || old_size % MSH_BUFF_SIZE != 0)
+    if (!old_ptr || !*old_ptr || !**old_ptr || old_size % MSH_BUFF_SIZE != 0)
 	return ;
     new_size = ((old_size / MSH_BUFF_SIZE) + 1) * MSH_BUFF_SIZE;
     ft_notrealloc(old_ptr, old_size, new_size);
@@ -24,10 +38,29 @@ void	ft_notrealloc(char **old_ptr, size_t old_size, size_t new_size)
     *old_ptr = new_ptr;
 }
 
+char	*var_to_str(t_var *var)
+{
+    char    *ret;
+    size_t  name_len;
+    size_t  val_len;
+
+    name_len = ft_strlen(var->name);
+    val_len = ft_strlen(var->value);
+    if (!(ret = (char*)malloc(name_len + val_len + 2)))
+	cleanup (-1, "Malloc failed at var_to_srt");
+    ft_bzero(ret, name_len + val_len + 2);
+    ft_memcpy(ret, var->name, name_len);
+    ret[name_len] = '=';
+    ft_memcpy(ret, var->value, val_len);
+    return (ret);
+}
+
 void	append_str(char **str, int *i, char *new)
 {
     int	    j;
 
+    if (!new || !*new || !i || !new)
+	return ;
     j = -1;
     while (new[++j])
     {

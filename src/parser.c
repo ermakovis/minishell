@@ -21,8 +21,8 @@ static void	add_token(char **token, int *i)
 	return;
     if (!(new = ft_lstnew(*token, ft_strlen(*token) + 1)))
 	cleanup(-1, "Malloc failed at add_token");
-    ft_lstadd(&(g_msh->tok), new); 
-    *token = NULL;
+    ft_lstadd_last(&(g_msh->tok), new); 
+    ft_memdel((void**)token);
     *i = 0;
 }
 
@@ -35,6 +35,7 @@ void		parse_line(void)
     i = 0;
     token = NULL;
     line = g_msh->rl->line;
+    ft_printf("%s\n", line);
     while (line)
     {
 	if (!token)
@@ -43,9 +44,9 @@ void		parse_line(void)
 	realloc_check(&token, i);
 	if ((*line == '~' && !token[i]) || *line == '$')
 	    pr_expans(&token, &i, &line);
-//	else if ((*line == '\'' || *line == '\"' || *line == '\\')
-//	    pr_quotes(&token, &i, &line);
-	if (!*line || *line == ' ' || *line == '\t')
+	else if (*line == '\'' || *line == '\"' || *line == '\\')
+	    pr_quotes(&token, &i, &line);
+	else if (!*line || *line == ' ' || *line == '\t')
 	    add_token(&token, &i);
 	else  
 	    token[i++] = *line;

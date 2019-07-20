@@ -31,7 +31,7 @@ static char	*find_exec_join(char *s1, char *s2)
     return (join);
 }
 
-void	find_executable()
+void	find_executable(void)
 {
     int		i;
     char	**paths;
@@ -39,12 +39,12 @@ void	find_executable()
     char	*new;
     t_stat	stat;
 
-    if (!g_msh || !g_msh->tok || !g_msh->tok->token)
+    if (!g_msh || !g_msh->tok || !g_msh->tok->content)
 	return ;
     i = -1;
     new = NULL;
-    exe = g_msh->tok->token;
-    if (!(paths = ft_strsplit(parse_env("PATH=", g_msh->env), ':')))
+    exe = g_msh->tok->content;
+    if (!(paths = ft_strsplit(find_var(g_msh->env, "PATH"), ':')))
 	cleanup(-1, "find_executable");
     while (paths && paths[++i])
     {
@@ -56,11 +56,11 @@ void	find_executable()
 	    ft_memdel((void**)&new);
 	else
 	{
-	    ft_memdel((void**)&(g_msh->tok->token));
-	    g_msh->tok->token = new;
-	    clean_table(&paths); 
+	    ft_memdel((void**)&(g_msh->tok->content));
+	    g_msh->tok->content = new;
+	    ft_free_table(&paths); 
 	    return ;
 	}
     }
-    clean_table(&paths); 
+   ft_free_table(&paths); 
 }

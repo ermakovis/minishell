@@ -13,36 +13,37 @@ void		    pr_expans_dsign(char **token, int *i, char **line)
 {
     int	    j;
     char    var_name[NAME_MAX + 1];
+    char    *var_value;
 
     j = 0;
+    (*line)++;
     ft_bzero(var_name, NAME_MAX + 1);
     while(**line && !is_special(**line) && j < NAME_MAX)
     {	
-	var_name[j++] == **line;
+	var_name[j++] = **line;
 	(*line)++;
     }
-    append_str(token, i, find_var(g_msh->var, var_name));
+    if ((var_value = find_var(g_msh->var, var_name)))
+    	append_str(token, i, var_value);
+    (*line)--;
 }
 
 void		    pr_expans_tild(char **token, int *i, char **line)
 {
-    (*line)++;
-    if (**line == '+')
+    if (*(*line + 1) == '+')
 	append_str(token, i, find_var(g_msh->env, "PWD"));
-    else if (**line == '-')
+    else if (*(*line + 1) == '-')
 	append_str(token, i, find_var(g_msh->env, "OLDPWD"));
     else
 	append_str(token, i, find_var(g_msh->env, "HOME"));
-    if (**line == '\\')
-	(*token)[++(*i)] == '\\';
-    if ((**line == '+' || **line == '-') && *((*line)++) =='\\')
-	(*token)[++(*i)] == '\\';
+    if (*(*line + 1) == '+' || *(*line + 1) == '-')
+	(*line)++;
 }
 
 void		    pr_expans(char **token, int *i, char **line)
 {
     if (**line == '~')
 	pr_expans_tild(token, i, line);
-    else if (**line == '$')
+    while (**line == '$')
 	pr_expans_dsign(token, i, line);
 }
