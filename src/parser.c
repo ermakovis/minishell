@@ -2,9 +2,7 @@
 
 void	    printl_str(t_list *list)
 {
-    if (!list)
-	return;
-    ft_printf("%s\n", list->content);
+    ft_printf("token %s\n", list->content);
 }
 
 void	    delete_str(void *content, size_t size)
@@ -16,7 +14,7 @@ void	    delete_str(void *content, size_t size)
 static void	add_token(char **token, int *i)
 {
     t_list   *new;
-    
+
     if (!token || !*token || !**token)
 	return;
     if (!(new = ft_lstnew(*token, ft_strlen(*token) + 1)))
@@ -25,6 +23,16 @@ static void	add_token(char **token, int *i)
     ft_memdel((void**)token);
     *i = 0;
 }
+
+static void	pr_semicol(char **token, int *i, char **line)
+{
+    add_token(token, i);
+    if (!(*token = ft_strnew(MSH_BUFF_SIZE)))
+	cleanup(-1, "Malloc failed at pr_semicol");
+    (*token)[(*i)++] = **line;
+    add_token(token, i);
+}
+
 
 void		parse_line(void)
 {
@@ -35,25 +43,24 @@ void		parse_line(void)
     i = 0;
     token = NULL;
     line = g_msh->rl->line;
-    ft_printf("%s\n", line);
-    while (line)
+    while (*line)
     {
 	if (!token)
 	    if (!(token = ft_strnew(MSH_BUFF_SIZE)))
 		cleanup(-1, "Malloc failed at parser");
 	realloc_check(&token, i);
-	if ((*line == '~' && !token[i]) || *line == '$')
+	if ((*line == '~' && !token[0]) || *line == '$')
 	    pr_expans(&token, &i, &line);
 	else if (*line == '\'' || *line == '\"' || *line == '\\')
 	    pr_quotes(&token, &i, &line);
-	else if (!*line || *line == ' ' || *line == '\t')
+	else if (*line == ' ' || *line == '\t')
 	    add_token(&token, &i);
+	else if (*line == ';')
+	    pr_semicol(&token, &i, &line);
 	else  
 	    token[i++] = *line;
-	if (!*line)
-	    return;
 	line++;	
     }
+    add_token(&token, &i);
+    ft_memdel((void**)&token);
 }
-
-

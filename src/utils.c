@@ -51,7 +51,7 @@ char	*var_to_str(t_var *var)
     ft_bzero(ret, name_len + val_len + 2);
     ft_memcpy(ret, var->name, name_len);
     ret[name_len] = '=';
-    ft_memcpy(ret, var->value, val_len);
+    ft_memcpy(ret + name_len + 1, var->value, val_len);
     return (ret);
 }
 

@@ -38,6 +38,8 @@ char		**ft_strsplit(char const *s, char c)
     int		j;
     int		k;
 
+    if (!s | !*s)
+	return (NULL);
     if (!(tab = (char **)malloc(sizeof(char *) * (nbwords(s, c) + 1))))
 	return (NULL);
     ft_bzero(tab, sizeof(char *) * (nbwords(s, c) + 1));

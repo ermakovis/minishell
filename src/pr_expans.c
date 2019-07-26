@@ -25,6 +25,8 @@ void		    pr_expans_dsign(char **token, int *i, char **line)
     }
     if ((var_value = find_var(g_msh->var, var_name)))
     	append_str(token, i, var_value);
+    else if ((var_value = find_var(g_msh->env, var_name)))
+    	append_str(token, i, var_value);
     (*line)--;
 }
 

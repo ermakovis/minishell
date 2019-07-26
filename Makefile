@@ -26,13 +26,19 @@ SRC_NAME=main.c\
 	init_bins.c\
 	read_line.c\
 	rl_input_manipulation.c\
+	rl_history.c\
+	rl_history_change.c\
 	parser.c\
 	pr_expans.c\
 	pr_quotes.c\
 	launch_programm.c\
+	lch_checks.c\
 	find_executable.c\
 	msh_small_funcs.c\
+	msh_cd.c\
+	var_functions.c\
 	utils.c\
+	future_lib.c\
 	cleanup.c
 
 OBJ_NAME=$(SRC_NAME:.c=.o)

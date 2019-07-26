@@ -1,46 +1,5 @@
 #include "minishell.h"
 
-void	    add_var(char *name, char *value, t_list **alist)
-{
-    t_list  *new_list;
-    t_var   *new;
-    size_t  size;
-
-    size = sizeof(t_var);
-    if (!(new = (t_var*)malloc(size)))
-	cleanup(-1, "Malloc failed at create_var");
-    if (!(new->name = ft_strdup(name)))
-	cleanup(-1, "Malloc failed at create_var 2");
-    if (!(new->value = ft_strdup(value)))
-	cleanup(-1, "Malloc failed at create_var 3");
-    if (!(new_list = ft_lstnew(new, size)))
-	cleanup(-1, "Malloc failed at create_var 4");
-    ft_memdel((void**)&new);
-    ft_lstadd(alist, new_list);
-}
-
-void	    print_var(t_list *list)
-{
-    t_var *var;
-
-    if (!list || !list->content)
-	return;
-    var = list->content;
-    ft_printf("%s - %s\n", var->name, var->value);
-}
-
-void	    delete_var(void *content, size_t size)
-{
-    t_var   *var;
-
-    if (!content)
-	return ;
-    var = content;
-    ft_memdel((void**)&(var->name));
-    ft_memdel((void**)&(var->value));
-    ft_memdel((void**)&content);
-    size = 0;
-}
 
 char	    *find_var(t_list *list, char *var_name)
 {

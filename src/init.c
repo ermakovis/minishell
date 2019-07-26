@@ -14,6 +14,11 @@ static void	init_cmd(void)
 	cleanup(-1, "Failed to malloc for command structure");
     ft_bzero(cmd, sizeof(t_cmd));
     cmd->area = cmd_buff;
+    cmd->start = tgetstr("cr", &cmd_buff);
+    cmd->clear_line = tgetstr("ce", &cmd_buff);
+    cmd->clear_rest = tgetstr("cd", &cmd_buff);
+    cmd->cur_start = tgetstr("cr", &cmd_buff);
+    cmd->up = tgetstr("up", &cmd_buff);
     cmd->left = tgetstr("le", &cmd_buff);
     cmd->right = tgetstr("nd", &cmd_buff);
     cmd->del = tgetstr("dc", &cmd_buff);

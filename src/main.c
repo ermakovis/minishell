@@ -5,6 +5,8 @@ void	set_terminal_raw(void)
     t_term  *orig;
     t_term  raw;
 
+    if (!isatty(STDIN_FILENO))
+	return ;
     if (!(orig = (t_term*)malloc(sizeof(t_term))))
 	cleanup(-1, "Failed to malloc for terminal state structure");
     if (tcgetattr(0, orig) == -1)
@@ -19,8 +21,21 @@ void	set_terminal_raw(void)
 
 void	set_terminal_canon(void)
 {
+    if (!isatty(STDIN_FILENO))
+	return ;
     if (tcsetattr(0, TCSANOW, g_msh->original_state) == -1)
 	cleanup(-1, "Failed to set terminal to raw mode");
+}
+
+void	handle_sigint(int sig)
+{
+    if (!g_msh->rl->status)
+    {
+	ft_printf("\n");
+	display_prompt();
+    }
+    cl_rl_struct();
+    init_rl();
 }
 
 int	main(int argc, char **argv, char **env)
@@ -31,8 +46,10 @@ int	main(int argc, char **argv, char **env)
     init(env);
     set_terminal_raw();
     display_prompt();
+    signal(SIGINT, handle_sigint);
     while (read_line())
     {
+	rl_add_history();
 	parse_line();
 	launch_program();
 	cl_rl_struct();

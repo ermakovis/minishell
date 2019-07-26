@@ -16,6 +16,7 @@ void	cl_rl_struct(void)
     if (!g_msh->rl)
 	return ;
     ft_memdel((void**)&g_msh->rl->line);    
+    ft_memdel((void**)&g_msh->rl->history_orig);
     ft_memdel((void**)&g_msh->rl);
 }
 
@@ -40,6 +41,7 @@ void	cleanup(int exit_code, char *message)
     cl_rl_struct();
     cl_term_cmd_struct(); 
     cl_lch_struct();
+    ft_lstdel(&(g_msh->history), &delete_str);
     ft_lstdel(&(g_msh->env), &delete_var);
     ft_lstdel(&(g_msh->bin), &delete_builtins);
     ft_memdel((void**)&g_msh->original_state);

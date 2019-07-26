@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft.h"
+# include <sys/ioctl.h>
 # include <term.h>
 # include <curses.h>
 # include <limits.h>
@@ -12,7 +13,7 @@
 # include <stdio.h>
 
 # define MSH_BUFF_SIZE 2048
-# define MSH_CMD_BUFF 65536
+# define MSH_CMD_BUFF 262144
 # define LEFT	4479771
 # define RIGHT	4414235
 # define UP	4283163
@@ -20,12 +21,18 @@
 # define DELETE	2117294875
 # define BSPACE 127
 
+typedef struct	    winsize	t_wsize;
 typedef	struct	    termios	t_term;
 typedef struct	    stat	t_stat;
 
 typedef struct	    s_cmd
 {
     char	    *area;
+    char	    *start;
+    char	    *clear_line;
+    char	    *clear_rest;
+    char	    *cur_start;
+    char	    *up;
     char	    *left;
     char	    *right;
     char	    *del;
@@ -41,7 +48,10 @@ typedef struct	    s_lch
 
 typedef struct	    s_rl
 {
+    int		    status;
     char	    *line;
+    int	    	    history;
+    char	    *history_orig;
     size_t	    line_len;
     size_t	    cur_pos;
 }		    t_rl;
@@ -90,14 +100,22 @@ void		    init(char **env);
 **  init_env.c	    
 */
 void		    init_env(char **env);
-void		    add_var(char *name, char *value, t_list **alist);
-void		    delete_var(void *content, size_t size);
-void		    print_var(t_list *list);
 char		    *find_var(t_list *list, char *var_name);
 
 /*
-**  init_bins.c
+**  var_functions.c
 */
+int		    cmp_var(t_var *var, char *data_ref);
+void		    print_var(t_list *list);
+void		    set_var(t_list *list, char *var_name, char *var_value);
+void		    add_var(char *name, char *value, t_list **alist);
+void		    delete_var(void *content, size_t size);
+
+/*
+**  init_bins.c
+**  --add_bin
+*/
+int		    cmp_bins(t_bin *bin, char *data_ref);
 void		    init_bins(void);
 void		    delete_builtins(void *content, size_t size);
 
@@ -105,6 +123,7 @@ void		    delete_builtins(void *content, size_t size);
 **  read_line.c
 */
 int		    read_line(void);
+void		    init_rl(void);
 int		    get_char(long *ch);
 
 /*
@@ -115,7 +134,21 @@ void		    rl_move_cur(long ch);
 void		    rl_del_char(long ch);
 
 /*
+**  rl_history.c
+**  --rl_calc_hight(char *line);
+*/
+void		    rl_history(long ch);
+void		    rl_add_history(void);
+
+/*
+**  rl_history_replace.c
+*/
+void		    rl_history_change(int position);
+
+
+/*
 **  parser.c
+**  --add_token
 */
 void		   parse_line(void); 
 void		    delete_str(void *content, size_t size);
@@ -135,8 +168,20 @@ void		    pr_quotes(char **token, int *i, char **line);
 
 /*
 **  launch_programm.c
+**  --find_exec_join
+**  --check_bins
+**  --get_full_path
+**  --check_full_path
 */
 void		    launch_program(void);
+
+/*
+**  lch_checks.c
+*/
+void		    lch_tokens(void);
+void		    lch_env(void);
+void		    lch_check_var(void);
+int		    lch_check_bins(void);
 
 /*
 **  find_executable.c
@@ -148,6 +193,14 @@ void		    find_executable(void);
 */
 void		    msh_env(void);
 void		    msh_exit(void);
+void		    msh_unsetenv(void);
+void		    msh_setenv(void);
+
+/*
+**  msh_cd.c
+**  --msh_cd_change
+*/
+void		    msh_cd(void);
 
 /*
 **  utils.c
@@ -158,6 +211,19 @@ void		    ft_notrealloc(char **old_ptr, size_t old_size, size_t new_size);
 void		    display_prompt(void);
 void		    append_str(char **str, int *i, char *new);
 char		    *var_to_str(t_var *var);
+
+
+/*
+**  future_lib.c
+*/
+t_list		    *ft_lst_num(t_list *alist, size_t num);
+t_list		    *ft_lst_find(t_list *alist, void *data_ref, int (*cmp)());
+void		    ft_lst_remove_if(t_list **alist, void *data_ref, int (*cmp)(),\
+			void (*del)());
+int		    ft_test_path(char *path);
+int		    ft_item_type(char *path);
+int		    ft_table_size(char **table);
+void		    ft_print_table(char **table);
 
 /*
 **  cleanup.c

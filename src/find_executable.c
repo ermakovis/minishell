@@ -31,36 +31,61 @@ static char	*find_exec_join(char *s1, char *s2)
     return (join);
 }
 
+static int  check_bins(char *str)
+{
+    if (ft_lst_find(g_msh->bin, str, &cmp_bins))
+	return (1);
+    return (0);
+}
+
+static void get_full_path(char *path, char **new)
+{
+    char    *exe;
+
+    exe = g_msh->tok->content;
+    if (ft_strnequ(exe, path, ft_strlen(path)))
+	*new = ft_strdup(exe);
+    else
+	*new = find_exec_join(path, exe);
+}
+
+static int  check_full_path(char **new)
+{
+    if (!ft_test_path(*new))
+    {
+	ft_memdel((void**)new);
+	return (0);
+    }
+    else
+    {
+	ft_memdel((void**)&(g_msh->tok->content));
+	g_msh->tok->content = *new;
+	return (1);
+    }
+}
+
 void	find_executable(void)
 {
     int		i;
     char	**paths;
-    char	*exe;
+    char	*paths_env;
     char	*new;
-    t_stat	stat;
 
     if (!g_msh || !g_msh->tok || !g_msh->tok->content)
 	return ;
+    if (check_bins(g_msh->tok->content))
+	return ;
+    if (!(paths_env = find_var(g_msh->env, "PATH")))
+	return ;
     i = -1;
     new = NULL;
-    exe = g_msh->tok->content;
-    if (!(paths = ft_strsplit(find_var(g_msh->env, "PATH"), ':')))
+    if (!(paths = ft_strsplit(paths_env, ':')))
 	cleanup(-1, "find_executable");
-    while (paths && paths[++i])
+    while (paths[++i])
     {
-	if (ft_strnequ(exe, paths[i], ft_strlen(paths[i])))
-	    new = ft_strdup(exe);
-	else
-	    new = find_exec_join(paths[i], exe);
-	if (lstat(new, &stat) == -1)
-	    ft_memdel((void**)&new);
-	else
-	{
-	    ft_memdel((void**)&(g_msh->tok->content));
-	    g_msh->tok->content = new;
-	    ft_free_table(&paths); 
-	    return ;
-	}
+	get_full_path(paths[i], &new);
+	if (check_full_path(&new))
+	    break ;
     }
-   ft_free_table(&paths); 
+    ft_free_table(&paths); 
 }

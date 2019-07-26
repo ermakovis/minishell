@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+int		cmp_bins(t_bin *bin, char *data_ref)
+{
+    return (ft_strcmp(bin->name, data_ref));
+}
+
 void	delete_builtins(void *content, size_t size)
 {
     t_bin *bin;
@@ -37,17 +42,12 @@ static void	add_builtin(char *name, void (*func)(void))
     ft_memdel((void**)&new_bin);
 }
 
-void	print_builtins(t_list *list)
-{
-    t_bin *bin;
-
-    bin = list->content;
-    ft_printf("%s\n", bin->name);
-}
-
 void		init_bins(void)
 {
     add_builtin("env", &msh_env);
     add_builtin("exit", &msh_exit);
-    //ft_lstiter(g_msh->bin, &print_builtins);
+    add_builtin("setenv", &msh_setenv);
+    add_builtin("unsetenv", &msh_unsetenv);
+    add_builtin("cd", &msh_cd);
+    //ft_lstiter(g_msh->bi n, &print_builtins);
 }
