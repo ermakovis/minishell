@@ -4,6 +4,8 @@ void	    rl_print_char(char ch)
 {
     t_rl    *rl;
 
+    if (!ft_isprint(ch))
+	return ;
     rl = g_msh->rl;
     realloc_check(&(rl->line), rl->line_len);
     ft_printf("%s", g_msh->cmd->insert_mode_on);
@@ -17,12 +19,12 @@ void	    rl_print_char(char ch)
     ft_printf("%s", g_msh->cmd->insert_mode_off);
 }
 
-
 void	    rl_move_cur(long ch)
 {
     t_rl    *rl;
 
-
+    if (!(ch == LEFT || ch == RIGHT))
+	return ;
     rl = g_msh->rl;
     if (ch == LEFT && rl->cur_pos > 0 && rl->line[rl->cur_pos - 1] != '\n')
     {
@@ -44,7 +46,8 @@ void	    rl_del_char(long ch)
 {
     t_rl    *rl;
 
-
+    if (!(ch == DELETE || ch == BSPACE))
+	return ;
     rl = g_msh->rl;
     if (ch == DELETE && rl->cur_pos < rl->line_len)
     {
@@ -54,7 +57,8 @@ void	    rl_del_char(long ch)
 	rl->line_len--;
 	ft_printf("%s", g_msh->cmd->del);
     }
-    else if (ch == BSPACE && rl->cur_pos > 0 && rl->line[rl->cur_pos - 1] != '\n')
+    else if (ch == BSPACE && rl->cur_pos > 0 &&\
+	rl->line[rl->cur_pos - 1] != '\n')
     {
 	ft_memmove(&(rl->line[rl->cur_pos - 1]), &(rl->line[rl->cur_pos]),\
 		rl->line_len - rl->cur_pos);

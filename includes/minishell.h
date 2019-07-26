@@ -3,6 +3,7 @@
 # include "libft.h"
 # include <sys/ioctl.h>
 # include <term.h>
+# include <dirent.h>
 # include <curses.h>
 # include <limits.h>
 # include <termios.h>
@@ -20,10 +21,12 @@
 # define DOWN	4348699
 # define DELETE	2117294875
 # define BSPACE 127
+# define TAB	9
 
 typedef struct	    winsize	t_wsize;
 typedef	struct	    termios	t_term;
 typedef struct	    stat	t_stat;
+typedef struct	    dirent	t_dir;
 
 typedef struct	    s_cmd
 {
@@ -145,6 +148,11 @@ void		    rl_add_history(void);
 */
 void		    rl_history_change(int position);
 
+/*
+**  rl_tab.c
+**  --tl_tab_compare
+*/
+void		    tl_tab(long ch);
 
 /*
 **  parser.c

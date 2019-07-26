@@ -19,6 +19,8 @@ void	rl_history(long ch)
     t_rl    *rl;
     int	    size;
 
+    if (!(ch == UP || ch == DOWN))
+	return ;
     if (!g_msh->history || !g_msh->history->content)
 	return ;
     rl = g_msh->rl;

@@ -59,14 +59,11 @@ int		read_line(void)
     {
 	if ((ch == '\n' && rl_quotes_check()))
 	    return ((g_msh->rl->status = 1));
-	else if (ch == UP || ch == DOWN)
-	    rl_history(ch);
-	else if (ch == LEFT || ch == RIGHT)
-	    rl_move_cur(ch);
-	else if (ch == DELETE || ch == BSPACE)
-	    rl_del_char(ch);
-	else if (ft_isprint(ch))
-	    rl_print_char(ch);
+	rl_tab(ch);
+	rl_history(ch);
+	rl_move_cur(ch);
+	rl_del_char(ch);
+	rl_print_char(ch);
 	ch = 0;
     }
 }

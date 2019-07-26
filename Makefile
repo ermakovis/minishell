@@ -28,6 +28,7 @@ SRC_NAME=main.c\
 	rl_input_manipulation.c\
 	rl_history.c\
 	rl_history_change.c\
+	rl_tab.c\
 	parser.c\
 	pr_expans.c\
 	pr_quotes.c\
