@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_item_type.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/06 13:07:00 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 15:28:22 by tcase            ###   ########.fr       */
+/*   Created: 2019/07/26 20:12:47 by tcase             #+#    #+#             */
+/*   Updated: 2019/07/26 20:25:07 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *str)
+int	ft_item_type(char *path)
 {
-	size_t	i;
+	t_stat	stat;
 
-	if (!str)
+	if (!path || !*path)
+		return (-1);
+	if (lstat(path, &stat) == -1)
 		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+	if (S_ISSOCK(stat.st_mode))
+		return (1);
+	if (S_ISDIR(stat.st_mode))
+		return (2);
+	if (S_ISLNK(stat.st_mode))
+		return (3);
+	if (S_ISFIFO(stat.st_mode))
+		return (4);
+	if (S_ISCHR(stat.st_mode))
+		return (5);
+	if (S_ISBLK(stat.st_mode))
+		return (6);
+	return (-1);
 }

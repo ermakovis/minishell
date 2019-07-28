@@ -19,12 +19,15 @@ SRCS_NAME=ft_abs.c ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \
 		 ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c \
 		 ft_toupper.c ft_lstdelone.c ft_lstdel.c ft_strchrlen.c\
 		 ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_lstsize.c ft_lstpop.c\
-		 ft_lstadd_last.c\
+		 ft_lstadd_last.c ft_lst_remove_if.c ft_lst_find.c\
+		 ft_lst_num.c ft_lst_sort.c\
 		 ft_strclen.c ft_nbrlen.c ft_strtoupper.c ft_swap.c \
 		 ft_power.c get_next_line.c ft_strndup.c ft_max.c ft_min.c\
 		 ft_printf.c ft_parse_format.c ft_print_string.c ft_print_digit.c \
 		 ft_print_unsigned_number.c ft_print_signed_number.c \
-		 ft_print_float.c ft_print_cleanup.c ft_print_wchar.c
+		 ft_print_float.c ft_print_cleanup.c ft_print_wchar.c\
+		 ft_test_path.c ft_item_type.c ft_table_size.c ft_print_table.c\
+		 ft_free_table.c
 
 SRCS_PATH = src/
 OBJ_PATH  = obj/

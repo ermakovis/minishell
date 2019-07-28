@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/14 11:37:29 by tcase             #+#    #+#             */
-/*   Updated: 2019/06/14 20:43:59 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/28 14:26:50 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 # define LIBFT_H
 # include <string.h>
 # include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include "get_next_line.h"
 
+typedef struct stat	t_stat;
 typedef struct		s_list
 {
-    void			*content;
-    size_t			content_size;
-    struct s_list	*next;
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
 }					t_list;
 
 int					ft_max(int a, int b);
@@ -83,6 +86,11 @@ void				ft_putstr_fd(const char *str, int fd);
 void				ft_putendl_fd(const char *str, int fd);
 void				ft_putnbr_fd(int n, int fd);
 t_list				*ft_lstnew(const void *content, size_t content_size);
+void				ft_lst_remove_if(t_list **alist, void *data_ref,\
+						int (*cmp)(), void (*del)());
+t_list				*ft_lst_find(t_list *alist, void *data_ref, int (*cmp)());
+t_list				*ft_lst_num(t_list *alist, size_t num);
+void				ft_lst_sort(t_list **alist, int (*cmp)());
 void				ft_lstpop(t_list **alst, void(*del)(void*, size_t));
 void				ft_lstdel(t_list **alst, void(*del)(void*, size_t));
 void				ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
@@ -98,5 +106,10 @@ void				ft_swap(char *a, char *b);
 int					ft_power(int n, int power);
 int					ft_unbrlen(unsigned long long int num, int base);
 int					ft_nbrlen(long long int num, int base);
+int					ft_test_path(char *path);
+int					ft_item_type(char *path);
+int					ft_table_size(char **table);
+void				ft_print_table(char **table);
+void				ft_free_table(char ***table);
 
 #endif

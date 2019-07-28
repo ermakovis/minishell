@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_print_table.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/06 13:07:00 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 15:28:22 by tcase            ###   ########.fr       */
+/*   Created: 2019/07/26 20:15:15 by tcase             #+#    #+#             */
+/*   Updated: 2019/07/28 15:29:26 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *str)
+void	ft_print_table(char **table)
 {
-	size_t	i;
+	int		i;
 
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+	if (!table && !table)
+		return ;
+	i = -1;
+	while (table[++i])
+		ft_printf("--%s\n", table[i]);
 }
