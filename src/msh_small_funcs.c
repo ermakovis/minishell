@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 19:25:28 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/26 19:27:41 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/28 16:43:28 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,26 @@ void	msh_exit(void)
 void	msh_env(void)
 {
 	ft_lstiter(g_msh->env, &print_var);
+}
+
+void	msh_echo(void)
+{
+	char	**tokens;
+	int		tokens_count;
+	int		i;
+
+	i = 0;
+	tokens = g_msh->lch->tokens;
+	tokens_count = ft_table_size(tokens);
+	if (tokens_count > 2 && ft_strnequ(tokens[1], "-n", 3))
+		i++;
+	while(tokens[++i])
+	{
+		ft_printf("%s", tokens[i]);
+		if (tokens[i + 1])
+			ft_printf(" ");
+	}
+	if (!(tokens_count > 2 && ft_strnequ(tokens[1], "-n", 3)))
+		ft_printf("\n");
+
 }

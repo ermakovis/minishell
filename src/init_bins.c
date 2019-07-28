@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 19:08:44 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/26 19:14:22 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/28 16:41:16 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,5 @@ void			init_bins(void)
 	add_builtin("setenv", &msh_setenv);
 	add_builtin("unsetenv", &msh_unsetenv);
 	add_builtin("cd", &msh_cd);
+	add_builtin("echo", &msh_echo);
 }

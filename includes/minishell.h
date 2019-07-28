@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/28 14:10:41 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 14:25:13 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/28 16:41:13 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ void					msh_env(void);
 void					msh_exit(void);
 void					msh_unsetenv(void);
 void					msh_setenv(void);
+void					msh_echo(void);
 
 /*
 **  msh_cd.c
