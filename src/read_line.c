@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 19:48:44 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 14:05:52 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:20:01 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ static int		rl_quotes_check(void)
 
 static void		rl_switch(long ch)
 {
-	//rl_copy(ch);
 	rl_tab(ch);
 	rl_history(ch);
 	rl_move_cur(ch);

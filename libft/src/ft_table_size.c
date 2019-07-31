@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 20:14:05 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 15:27:54 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:27:45 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_table_size(char **table)
 
 	if (!table || !*table)
 		return (-1);
-	i = -1;
+	i = 0;
 	while (table[i])
 		i++;
 	return (i);

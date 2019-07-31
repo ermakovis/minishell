@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 19:21:25 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/26 19:23:16 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:14:51 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,10 @@
 
 void	set_terminal_raw(void)
 {
-	t_term	*orig;
 	t_term	raw;
 
 	if (!isatty(STDIN_FILENO))
 		return ;
-	if (!(orig = (t_term*)malloc(sizeof(t_term))))
-		cleanup(-1, "Failed to malloc for terminal state structure");
-	if (tcgetattr(0, orig) == -1)
-		cleanup(-1, "Failed to save terminal original state");
-	g_msh->original_state = orig;
 	if (tcgetattr(0, &raw) == -1)
 		cleanup(-1, "Failed to save terminal original state");
 	raw.c_lflag &= ~(ICANON | ECHO);
@@ -36,7 +30,7 @@ void	set_terminal_canon(void)
 	if (!isatty(STDIN_FILENO))
 		return ;
 	if (tcsetattr(0, TCSANOW, g_msh->original_state) == -1)
-		cleanup(-1, "Failed to set terminal to raw mode");
+		cleanup(-1, "Failed to set terminal to canon mode");
 }
 
 void	handle_sigint(int sig)

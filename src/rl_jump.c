@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rl_jump.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/31 13:53:16 by tcase             #+#    #+#             */
+/*   Updated: 2019/07/31 13:54:16 by tcase            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static	void	rl_jump_word_next(long ch)
+static void	rl_jump_word_next(long ch)
 {
 	int		i;
 	char	*line;
@@ -23,7 +35,7 @@ static	void	rl_jump_word_next(long ch)
 	}
 }
 
-static	void	rl_jump_word_back(long ch)
+static void	rl_jump_word_back(long ch)
 {
 	int		i;
 	char	*line;
@@ -37,7 +49,7 @@ static	void	rl_jump_word_back(long ch)
 		rl_move_cur(LEFT);
 		i--;
 	}
-	while (i > 0 && line[i - 1] != ' ') 
+	while (i > 0 && line[i - 1] != ' ')
 	{
 		rl_move_cur(LEFT);
 		i--;

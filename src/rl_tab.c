@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 20:36:53 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 14:09:44 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:35:34 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,10 @@ void			rl_tab(long ch)
 		cleanup(-1, "rl_tab");
 	rl_tab_create_list(paths, rl_tab_lastword());
 	if (!g_msh->rl->tab_items)
+	{
+		ft_free_table(&paths);
 		return ;
+	}
 	ft_lst_sort(&(g_msh->rl->tab_items), &ft_strcmp);
 	while ((nch = rl_tab_check_char()))
 		rl_print_char(nch);

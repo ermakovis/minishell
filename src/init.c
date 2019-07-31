@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 19:05:51 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/26 19:07:45 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:19:26 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,22 @@ static void		init_msh(void)
 	g_msh = new_msh;
 }
 
+static void		init_orig_state(void)
+{
+	t_term	*orig;
+
+	if (!(orig = (t_term*)malloc(sizeof(t_term))))
+		cleanup(-1, "Failed to malloc for terminal state structure");
+	if (tcgetattr(0, orig) == -1)
+		cleanup(-1, "Failed to save terminal original state");
+	g_msh->original_state = orig;
+}
+
 void			init(char **env)
 {
 	init_msh();
 	init_env(env);
 	init_bins();
 	init_cmd();
+	init_orig_state();
 }

@@ -6,7 +6,7 @@
 /*   By: tcase <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/28 14:10:41 by tcase             #+#    #+#             */
-/*   Updated: 2019/07/28 16:41:13 by tcase            ###   ########.fr       */
+/*   Updated: 2019/07/31 12:54:27 by tcase            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@
 # define TAB			9
 # define PASTE			28669
 # define VISUAL_MODE	30235
-# define WORD_NEXT		30491
-# define WORD_BACK		25115
-# define LINE_START		24859
-# define LINE_END		26907
+# define WORD_NEXT		73883020516123
+# define WORD_BACK		74982532143899
+# define LINE_START		71683997260571
+# define LINE_END		72783508888347
 
 typedef struct winsize	t_wsize;
 typedef struct termios	t_term;
@@ -171,11 +171,6 @@ void					rl_history_change(int position);
 **  --tl_tab_compare
 */
 void					rl_tab(long ch);
-
-/*
-**	rl_copy.c
-*/
-void					rl_copy(long ch);
 
 /*
 **  parser.c

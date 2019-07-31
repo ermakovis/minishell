@@ -6,7 +6,7 @@
 #    By: tcase <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/06 11:31:10 by tcase             #+#    #+#              #
-#    Updated: 2019/07/28 14:05:11 by tcase            ###   ########.fr        #
+#    Updated: 2019/07/31 12:42:41 by tcase            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,6 @@ SRC_NAME=main.c\
 	rl_history.c\
 	rl_history_change.c\
 	rl_tab.c\
-	rl_copy.c\
 	parser.c\
 	pr_expans.c\
 	pr_quotes.c\
