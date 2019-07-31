@@ -26,9 +26,11 @@ SRC_NAME=main.c\
 	init_bins.c\
 	read_line.c\
 	rl_input_manipulation.c\
+	rl_jump.c\
 	rl_history.c\
 	rl_history_change.c\
 	rl_tab.c\
+	rl_copy.c\
 	parser.c\
 	pr_expans.c\
 	pr_quotes.c\

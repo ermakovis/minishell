@@ -56,7 +56,6 @@ int		main(int argc, char **argv, char **env)
 	int		ch;
 
 	init(env);
-	set_terminal_raw();
 	display_prompt();
 	signal(SIGINT, handle_sigint);
 	while (read_line())
@@ -67,6 +66,5 @@ int		main(int argc, char **argv, char **env)
 		cl_rl_struct();
 		display_prompt();
 	}
-	set_terminal_canon();
 	cleanup(0, NULL);
 }

@@ -34,6 +34,8 @@ static void		init_cmd(void)
 	cmd->left = tgetstr("le", &cmd_buff);
 	cmd->right = tgetstr("nd", &cmd_buff);
 	cmd->del = tgetstr("dc", &cmd_buff);
+	cmd->highlight_mode_on = tgetstr("so", &cmd_buff);
+	cmd->highlight_mode_off = tgetstr("se", &cmd_buff);
 	cmd->insert_mode_on = tgetstr("im", &cmd_buff);
 	cmd->insert_mode_off = tgetstr("ei", &cmd_buff);
 	g_msh->cmd = cmd;

@@ -25,15 +25,21 @@
 # include <sys/wait.h>
 # include <stdio.h>
 
-# define MSH_BUFF_SIZE 2048
-# define MSH_CMD_BUFF 262144
-# define LEFT	4479771
-# define RIGHT	4414235
-# define UP	4283163
-# define DOWN	4348699
-# define DELETE	2117294875
-# define BSPACE 127
-# define TAB	9
+# define MSH_BUFF_SIZE	2048
+# define MSH_CMD_BUFF 	262144
+# define LEFT			4479771
+# define RIGHT			4414235
+# define UP				4283163
+# define DOWN			4348699
+# define DELETE			2117294875
+# define BSPACE 		127
+# define TAB			9
+# define PASTE			28669
+# define VISUAL_MODE	30235
+# define WORD_NEXT		30491
+# define WORD_BACK		25115
+# define LINE_START		24859
+# define LINE_END		26907
 
 typedef struct winsize	t_wsize;
 typedef struct termios	t_term;
@@ -51,6 +57,8 @@ typedef struct			s_cmd
 	char				*left;
 	char				*right;
 	char				*del;
+	char				*highlight_mode_on;
+	char				*highlight_mode_off;
 	char				*insert_mode_on;
 	char				*insert_mode_off;
 }						t_cmd;
@@ -86,6 +94,7 @@ typedef struct			s_bin
 
 typedef struct			s_msh
 {
+	char				*buffer;
 	t_rl				*rl;
 	t_cmd				*cmd;
 	t_lch				*lch;
@@ -141,6 +150,11 @@ void					rl_move_cur(long ch);
 void					rl_del_char(long ch);
 
 /*
+**	rl_big_move.c
+*/
+void					rl_jump(long ch);
+
+/*
 **  rl_history.c
 **  --rl_calc_hight(char *line);
 */
@@ -157,6 +171,11 @@ void					rl_history_change(int position);
 **  --tl_tab_compare
 */
 void					rl_tab(long ch);
+
+/*
+**	rl_copy.c
+*/
+void					rl_copy(long ch);
 
 /*
 **  parser.c

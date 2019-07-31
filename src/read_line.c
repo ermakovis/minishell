@@ -61,23 +61,35 @@ static int		rl_quotes_check(void)
 	return (!dquote && !squote);
 }
 
+static void		rl_switch(long ch)
+{
+	//rl_copy(ch);
+	rl_tab(ch);
+	rl_history(ch);
+	rl_move_cur(ch);
+	rl_jump(ch);
+	rl_del_char(ch);
+	if (ft_isprint(ch))
+		rl_print_char(ch);
+}
+
 int				read_line(void)
 {
 	long	ch;
 
 	ch = 0;
 	init_rl();
+	set_terminal_raw();
 	while (get_char(&ch))
 	{
 		if ((ch == '\n' && rl_quotes_check()))
-			return ((g_msh->rl->status = 1));
-		rl_tab(ch);
-		rl_history(ch);
-		rl_move_cur(ch);
-		rl_del_char(ch);
-		if (ft_isprint(ch))
-			rl_print_char(ch);
+		{
+			g_msh->rl->status = 1;
+			break ;
+		}
+		rl_switch(ch);
 		ch = 0;
 	}
-	return (0);
+	set_terminal_canon();
+	return (g_msh->rl->status);
 }

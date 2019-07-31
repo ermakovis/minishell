@@ -54,6 +54,8 @@ void		parse_line(void)
 	char	*line;
 	char	*token;
 
+	if (!g_msh->rl->line)
+		return ;
 	i = 0;
 	token = NULL;
 	line = g_msh->rl->line;
